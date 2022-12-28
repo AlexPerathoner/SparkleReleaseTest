@@ -41,13 +41,13 @@ jobs:
         if: env.RELEASE == 'true'
         run: |
           if [[ $(xcrun agvtool what-version -terse) == $(cat new_version) ]]; then
-            echo "Version already released"
+            echo "Version already released" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
       - name: "Check if release notes are empty"
         run: |
           if [[ $(cat latest_changes) == "" ]]; then
-            echo "Release notes are empty"
+            echo "Release notes are empty" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
       - name: "Overwrite project versions in project"
@@ -113,4 +113,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Update version to ${{ steps.latest_changes.outputs.new_version }}"
+      - name: Create summary
+        run: |
+          echo "Release ${{ steps.latest_changes.outputs.new_version }} created" >> $GITHUB_STEP_SUMMARY
 
