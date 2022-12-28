@@ -28,6 +28,16 @@ jobs:
           echo "RELEASE=true" >> $GITHUB_ENV
       - name: "Checkout sources"
         uses: actions/checkout@v3
+      - name: Extract latest changes
+        id: latest_changes
+        run: |
+          python3 ./Configuration/generate_latest_changes.py
+          echo "{new_version}=$(cat new_version)" >> $GITHUB_STATE
+          echo "{title}=$(cat title)" >> $GITHUB_STATE
+      - name: "Overwrite project versions in project"
+        run: |
+          xcrun agvtool new-marketing-version ${{ steps.latest_changes.outputs.new_version }}
+          xcrun agvtool new-version ${{ steps.latest_changes.outputs.new_version }}
       - name: Install the Apple certificate and provisioning profile
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
@@ -66,16 +76,6 @@ jobs:
         run: xcodebuild -exportArchive -archivePath "${{ env.projname }}.xcarchive" -exportPath Release -exportOptionsPlist "Configuration/ExportOptions.plist"
       - name: Zip app
         run: zip -r -y Release/${{ env.projname }}.zip Release/${{ env.projname }}.app
-      - name: Extract latest changes
-        id: latest_changes
-        run: |
-          python3 ./Configuration/generate_latest_changes.py
-          echo "{new_version}=$(cat new_version)" >> $GITHUB_STATE
-          echo "{title}=$(cat title)" >> $GITHUB_STATE
-      - name: "Overwrite project versions in project"
-        run: |
-          xcrun agvtool new-marketing-version ${{ steps.latest_changes.outputs.new_version }}
-          xcrun agvtool new-version ${{ steps.latest_changes.outputs.new_version }}
       - name: "Draft a release"
         uses: softprops/action-gh-release@v1
         with:
