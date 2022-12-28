@@ -1,9 +1,11 @@
 name: "Create Draft Release"
 
 on:
+  issue_comment:
+    types: [created]
   pull_request:
     branches: ["master"]
-    types: [closed]
+    # types: [closed]
 
 concurrency:
   group: publish-release${{ github.ref }}
@@ -19,6 +21,11 @@ jobs:
     environment: deploy-release
 
     steps:
+      - name: "Check if comment is /release"
+        if: github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.author_association == 'OWNER'
+        run: |
+          echo "Comment is /release"
+          echo "RELEASE=true" >> $GITHUB_ENV
       - name: "Checkout sources"
         uses: actions/checkout@v3
       - name: Install the Apple certificate and provisioning profile
@@ -63,8 +70,8 @@ jobs:
         id: latest_changes
         run: |
           python3 ./Configuration/generate_latest_changes.py
-          echo ::set-output name=new_version::$(cat new_version)
-          echo ::set-output name=title::$(cat title)
+          echo "{new_version}=$(cat new_version)" >> $GITHUB_STATE
+          echo "{title}=$(cat title)" >> $GITHUB_STATE
       - name: "Overwrite project versions in project"
         run: |
           xcrun agvtool new-marketing-version ${{ steps.latest_changes.outputs.new_version }}
