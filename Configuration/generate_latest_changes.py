@@ -14,18 +14,15 @@ def get_latest_release_notes():
             if line.strip().startswith('*'):
                 notes += line.strip() + "\n"
             elif line.strip().startswith('#'):
-                previous_verion = line.strip().split(' - ')[0].replace('# ', 'v')
                 break
-        return title, latest_version, previous_verion, notes
+        return title, latest_version, notes
 
 if __name__ == '__main__':
-    title, latest_version, previous_verion, notes = get_latest_release_notes()
+    title, latest_version, notes = get_latest_release_notes()
     # write each value to a file
-    with open('../latest_version.txt', 'w') as f:
+    with open('../new_version', 'w') as f:
         f.write(latest_version)
-    with open('../previous_verion.txt', 'w') as f:
-        f.write(previous_verion)
-    with open('../latest_changes.txt', 'w') as f:
+    with open('../latest_changes', 'w') as f:
         f.write(notes)
-    with open('../title.txt', 'w') as f:
+    with open('../title', 'w') as f:
         f.write(title)

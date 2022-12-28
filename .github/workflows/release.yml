@@ -65,22 +65,20 @@ jobs:
       - name: Zip app
         run: zip -r -y Release/${{ env.projname }}.zip Release/${{ env.projname }}.app
       - name: Extract latest changes
-        run: python3 ./Configuration/generate_latest_changes.py            
-      - name: "Overwrite project versions in project"
-        env:
-          new_version: ${{ cat latest_version.txt }}
+        id: latest_changes
         run: |
-          xcrun agvtool new-marketing-version ${{ new_version }}
-          xcrun agvtool new-version ${{ new_version }}
+          python3 ./Configuration/generate_latest_changes.py
+          echo ::set-output name=new_version::$(cat new_version)
+          echo ::set-output name=title::$(cat title)      
+      - name: "Overwrite project versions in project"
+        run: |
+          xcrun agvtool new-marketing-version ${{ steps.latest_changes.outputs.new_version }}
+          xcrun agvtool new-version ${{ steps.latest_changes.outputs.new_version }}
       - name: "Draft a release"
-        env:
-          new_version: ${{ cat latest_version.txt }}
-          old_version: ${{ cat old_version.txt }}
-          title: ${{ cat title.txt }}
         uses: softprops/action-gh-release@v1
         with:
-          name: ${{ title }}
-          tag_name: ${{ new_version }}
+          name: ${{ steps.latest_changes.outputs.title }}
+          tag_name: ${{ steps.latest_changes.outputs.new_version }}
           fail_on_unmatched_files: true
           body_path: latest_changes.txt
           files: |
