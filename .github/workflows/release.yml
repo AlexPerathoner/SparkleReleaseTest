@@ -6,8 +6,7 @@ on:
   pull_request:
     branches: ["master"]
 
-
-concurrency: 
+concurrency:
   group: publish-release${{ github.ref }}
   cancel-in-progress: true
 
@@ -69,7 +68,7 @@ jobs:
         run: |
           python3 ./Configuration/generate_latest_changes.py
           echo ::set-output name=new_version::$(cat new_version)
-          echo ::set-output name=title::$(cat title)      
+          echo ::set-output name=title::$(cat title)
       - name: "Overwrite project versions in project"
         run: |
           xcrun agvtool new-marketing-version ${{ steps.latest_changes.outputs.new_version }}
@@ -80,7 +79,6 @@ jobs:
           name: ${{ steps.latest_changes.outputs.title }}
           tag_name: ${{ steps.latest_changes.outputs.new_version }}
           fail_on_unmatched_files: true
-          body_path: latest_changes.txt
+          body_path: latest_changes
           files: |
             Release/${{ env.projname }}.zip
-            
