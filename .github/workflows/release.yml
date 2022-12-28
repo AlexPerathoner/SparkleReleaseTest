@@ -3,6 +3,9 @@ name: "Create Draft Release"
 on:
   issue_comment:
     types: [created]
+  pull_request:
+    branches: ["master"]
+
 
 concurrency: 
   group: publish-release${{ github.ref }}
