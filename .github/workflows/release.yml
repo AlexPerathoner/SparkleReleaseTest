@@ -65,36 +65,24 @@ jobs:
       - name: Zip app
         run: zip -r -y Release/${{ env.projname }}.zip Release/${{ env.projname }}.app
       - name: Extract latest changes
-        run: echo "this are some changes" > latest-changes.txt
-          
-      # - name: "Extract latest changes from CHANGELOG"
-      #   run: |
-      #       ./Configurations/generate_latest_changes.py > latest-changes.txt
-            
-      # - name: "Overwrite project versions in project"
-      #   run: |
-      #       IFS='.' read major minor patch <<< "${{ github.event.inputs.marketingVersion }}"
-      #       sed -E -i '' "s/SPARKLE_VERSION_MAJOR =.+/SPARKLE_VERSION_MAJOR = $major/g" ./Configurations/ConfigCommon.xcconfig
-      #       sed -E -i '' "s/SPARKLE_VERSION_MINOR =.+/SPARKLE_VERSION_MINOR = $minor/g" ./Configurations/ConfigCommon.xcconfig
-      #       sed -E -i '' "s/SPARKLE_VERSION_PATCH =.+/SPARKLE_VERSION_PATCH = $patch/g" ./Configurations/ConfigCommon.xcconfig
-            
-      #       if [[ ! -z "${{ github.event.inputs.prereleaseSuffix }}" ]]; then
-      #           sed -E -i '' "s/SPARKLE_VERSION_SUFFIX =.*/SPARKLE_VERSION_SUFFIX = ${{ github.event.inputs.prereleaseSuffix }}/g" ./Configurations/ConfigCommon.xcconfig
-      #       else
-      #           sed -E -i '' "s/SPARKLE_VERSION_SUFFIX =.*/SPARKLE_VERSION_SUFFIX =/g" ./Configurations/ConfigCommon.xcconfig
-      #       fi
-            
-      #       sed -E -i '' "s/CURRENT_PROJECT_VERSION =.+/CURRENT_PROJECT_VERSION = ${{ github.event.inputs.buildVersion }}/g" ./Configurations/ConfigCommon.xcconfig
-      #       git add ./Configurations/ConfigCommon.xcconfig
+        run: python3 ./Configuration/generate_latest_changes.py            
+      - name: "Overwrite project versions in project"
+        env:
+          new_version: ${{ cat latest_version.txt }}
+          old_version: ${{ cat old_version.txt }}
+          title: ${{ cat title.txt }}
+        run: |
+          # replace all occurences of old version with new version
+
+
 
       - name: "Draft a release"
         uses: softprops/action-gh-release@v1
         with:
-          draft: true
-          name: "v1.1.0"
-          tag_name: "v1.1.0"
+          name: title # read from file
+          tag_name: "v1.1.0" # read from file
           fail_on_unmatched_files: true
-          body_path: latest-changes.txt
+          body_path: latest_changes
           files: |
             Release/${{ env.projname }}.zip
             
