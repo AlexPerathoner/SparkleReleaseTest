@@ -26,6 +26,9 @@ jobs:
         run: |
           echo "Comment is /release"
           echo "RELEASE=true" >> $GITHUB_ENV
+        else:
+          echo "Comment is not /release"
+          exit 1
       - name: "Checkout sources"
         uses: actions/checkout@v3
       - name: Extract latest changes
@@ -34,6 +37,19 @@ jobs:
           python3 ./Configuration/generate_latest_changes.py
           echo "{new_version}=$(cat new_version)" >> $GITHUB_STATE
           echo "{title}=$(cat title)" >> $GITHUB_STATE
+      - name: "Check if version already released"
+        if: env.RELEASE == 'true'
+        run: |
+          if [[ $(xcrun agvtool what-version -terse) == $(cat new_version) ]]; then
+            echo "Version already released"
+            exit 1
+          fi
+      - name: "Check if release notes are empty"
+        run: |
+          if [[ $(cat latest_changes) == "" ]]; then
+            echo "Release notes are empty"
+            exit 1
+          fi
       - name: "Overwrite project versions in project"
         run: |
           xcrun agvtool new-marketing-version ${{ steps.latest_changes.outputs.new_version }}
