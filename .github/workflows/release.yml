@@ -69,20 +69,20 @@ jobs:
       - name: "Overwrite project versions in project"
         env:
           new_version: ${{ cat latest_version.txt }}
+        run: |
+          xcrun agvtool new-marketing-version ${{ new_version }}
+          xcrun agvtool new-version ${{ new_version }}
+      - name: "Draft a release"
+        env:
+          new_version: ${{ cat latest_version.txt }}
           old_version: ${{ cat old_version.txt }}
           title: ${{ cat title.txt }}
-        run: |
-          # replace all occurences of old version with new version
-
-
-
-      - name: "Draft a release"
         uses: softprops/action-gh-release@v1
         with:
-          name: title # read from file
-          tag_name: "v1.1.0" # read from file
+          name: ${{ title }}
+          tag_name: ${{ new_version }}
           fail_on_unmatched_files: true
-          body_path: latest_changes
+          body_path: latest_changes.txt
           files: |
             Release/${{ env.projname }}.zip
             
