@@ -7,7 +7,10 @@ xcodebuild clean archive -project $PROJNAME.xcodeproj -scheme $PROJNAME -archive
 # export archive to app
 xcodebuild -exportArchive -archivePath "$PROJNAME.xcarchive" -exportPath Release -exportOptionsPlist "Release/ExportOptions.plist"
 
+zip -r -y Release/$PROJNAME.zip Release/$PROJNAME.app
+
 # cleanup
 rm -R $PROJNAME.xcarchive
 rm Release/DistributionSummary.plist
 rm Release/Packaging.log
+rm -R Release/$PROJNAME.app
