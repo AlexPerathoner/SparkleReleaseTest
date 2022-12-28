@@ -15,9 +15,8 @@ jobs:
   check-comment:
     runs-on: ubuntu-latest
     steps:
-      - name: Execute for pull request comments only
-        if: contains(github.event.comment.body, '/release')
       - name: Dump GitHub context
+        if: contains(github.event.comment.body, '/release')
         env:
           STUFF: ${{ toJson(github.event) }}
         run: echo "$STUFF"
