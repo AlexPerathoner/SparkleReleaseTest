@@ -21,6 +21,9 @@ jobs:
     environment: deploy-release
 
     steps:
+      - name: Dump GitHub context
+        if: contains(github.event.comment.body, '/release') && github.event.comment.user.login == 'AlexPerathoner'
+        run: echo "ok"
       - name: "Checkout sources"
         uses: actions/checkout@v3
       - name: Install the Apple certificate and provisioning profile
