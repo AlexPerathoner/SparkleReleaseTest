@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Dump GitHub context
-        if: contains(github.event.comment.body, '/release')
+        if: contains(github.event.comment.body, '/release') && github.event.comment.user.login == 'AlexPerathoner'
         env:
           STUFF: ${{ toJson(github.event) }}
         run: echo "$STUFF"
