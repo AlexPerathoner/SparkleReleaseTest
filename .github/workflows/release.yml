@@ -93,20 +93,23 @@ jobs:
           cd Release
           zip -r -y ${{ env.projname }}.zip ${{ env.projname }}.app
           cd ..
-      - name: Import Sparkle Key
+      - name: Prepare Sparkle update creation
         env:
           PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
         run: |
           echo -n "$PRIVATE_SPARKLE_KEY" > ./Configuration/sparkle_private_key
-      - name: Remove files in Release
-        run: |
           rm -rf Release/*.app
           rm -rf Release/*.log
           rm -rf Release/*.plist
+          mv latest_changes Release/${{ env.projname }}.html
       - name: Sign update
-        run: | # todo add description of update
+        run: | # todo add description of update and link
           mv docs/Support/appcast.xml Release/appcast.xml
-          ./Configuration/generate_appcast --ed-key-file Configuration/sparkle_private_key Release/
+          ./Configuration/generate_appcast \
+              --ed-key-file Configuration/sparkle_private_key \
+              --link https://github.com/AlexPerathoner/${{ env.projname }}/releases \
+              --download-url-prefix https://github.com/AlexPerathoner/${{ env.projname }}/releases/download/v${{ steps.latest_changes.outputs.new_version }}/ \
+              Release/
           mv Release/appcast.xml docs/Support/appcast.xml
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
@@ -122,7 +125,6 @@ jobs:
           rm -rf Release
           rm -rf ${{ env.projname }}.xcarchive
           rm -rf ${{ env.projname }}.zip
-          rm -rf latest_changes
           rm -rf new_version
           rm -rf title
           rm -rf Configuration/sparkle_private_key
