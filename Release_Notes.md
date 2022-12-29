@@ -1,3 +1,6 @@
+# 1.3.2 - Again checkout
+* checking out branch, again
+
 # 1.3.1 - New fixes
 * checking out branch
 
