@@ -29,19 +29,23 @@ jobs:
           python3 ./Configuration/generate_latest_changes.py
           echo "{new_version}=$(cat new_version)" >> $GITHUB_STATE
           echo "{title}=$(cat title)" >> $GITHUB_STATE
-      - name: "Check if version already released"
+      - name: Print version and title
+        run: |
+          echo "Version: ${{ steps.latest_changes.outputs.new_version }}"
+          echo "Title: ${{ steps.latest_changes.outputs.title }}"
+      - name: Check if version already released
         run: |
           if [[ $(xcrun agvtool what-version -terse) == $(cat new_version) ]]; then
             echo "Version already released" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
-      - name: "Check if release notes are empty"
+      - name: Check if release notes are empty
         run: |
           if [[ $(cat latest_changes) == "" ]]; then
             echo "Release notes are empty" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
-      - name: "Overwrite project versions in project"
+      - name: Overwrite project versions in project
         run: |
           xcrun agvtool new-marketing-version ${{ steps.latest_changes.outputs.new_version }}
           xcrun agvtool new-version ${{ steps.latest_changes.outputs.new_version }}
