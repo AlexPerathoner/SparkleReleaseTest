@@ -17,7 +17,7 @@ jobs:
         name: automerge
         uses: "pascalgn/automerge-action@v0.15.5"
         env:
-          UPDATE_LABELS: "/release"
+          UPDATE_LABELS: ""
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           MERGE_COMMIT_MESSAGE: "Release new version"
           MERGE_FILTER_AUTHOR: "AlexPerathoner"
