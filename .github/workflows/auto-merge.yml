@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Echo hi
-        run: echo hi
+        run: echo hello
       - id: automerge
         name: automerge
         uses: "pascalgn/automerge-action@v0.15.5"
