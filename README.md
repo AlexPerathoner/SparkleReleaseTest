@@ -14,3 +14,5 @@ Todo:
 - [x] /release command triggers action and release
 - [ ] signing not working
 - [ ] update version in project
+
+some changes
