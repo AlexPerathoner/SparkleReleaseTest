@@ -131,6 +131,7 @@ jobs:
           rm -rf ${{ env.projname }}.zip
           rm -rf latest_changes
           rm -rf new_version
+          rm -rf old_version
           rm -rf title
           rm -rf Configuration/sparkle_private_key
       - name: Saving changes
