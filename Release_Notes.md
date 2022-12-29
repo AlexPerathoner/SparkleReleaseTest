@@ -1,3 +1,6 @@
+# 1.4.3 - test sparkle generator pt3
+* even more and more
+
 # 1.4.2 - test sparkle generator pt2
 * more generate appcast using Sparkle tool
 * even more
