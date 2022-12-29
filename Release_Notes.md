@@ -1,3 +1,6 @@
+# 1.3.7 - Sign test pt4
+* fix zip
+
 # 1.3.6 - Sign test pt3
 * some more changes
 
