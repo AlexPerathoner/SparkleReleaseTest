@@ -32,10 +32,6 @@ jobs:
           python3 ./Configuration/generate_latest_changes.py
           echo "new_version=$(cat new_version)" >> $GITHUB_OUTPUT
           echo "title=$(cat title)" >> $GITHUB_OUTPUT
-      - name: Print version and title
-        run: |
-          echo "Version: ${{ steps.latest_changes.outputs.new_version }}"
-          echo "Title: ${{ steps.latest_changes.outputs.title }}"
       - name: Check if version already released
         run: |
           if [[ $(xcrun agvtool what-version -terse) == $(cat new_version) ]]; then
