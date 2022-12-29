@@ -1,5 +1,6 @@
 # 1.3.3 - Version test
 * Version tests
+* some more changes
 
 # 1.3.2 - Again checkout
 * checking out branch, again
