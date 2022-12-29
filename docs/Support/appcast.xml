@@ -5,6 +5,17 @@
         <description>Most recent changes with links to updates.</description>
         <language>en</language>
         <item>
+            <title>1.4.1</title>
+            <pubDate>Thu, 29 Dec 2022 20:49:57 +0000</pubDate>
+            <link>https://github.com/AlexPerathoner/testSparkleRelease/releases</link>
+            <sparkle:version>1.4.1</sparkle:version>
+            <sparkle:shortVersionString>1.4.1</sparkle:shortVersionString>
+            <description><![CDATA[* generate appcast using Sparkle tool
+]]></description>
+            <sparkle:minimumSystemVersion>13.1</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/AlexPerathoner/testSparkleRelease/releases/download/v1.4.1/testSparkleRelease.zip" length="1228386" type="application/octet-stream" sparkle:edSignature="cnuCx9PcFXOeEo+WWfh+x1gOYdQ6JOc9dp6R/mK5iJJ6Dh4pM/C8CH2F6s3EgiNFCjOHhhPZ4wbzQHEd1PuIAg=="/>
+        </item>
+        <item>
             <title>1.4.0</title>
             <pubDate>Thu, 29 Dec 2022 20:27:00 +0000</pubDate>
             <sparkle:version>1.4.0</sparkle:version>
