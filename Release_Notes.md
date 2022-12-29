@@ -1,3 +1,8 @@
+# 1.2.2 - Testing
+
+# 1.2.1 - Fixing Stuff
+* '/release' will automaticallly merge the PR
+
 # 1.2.0 - New Stuff
 * Some changes in last update
 * Even more changes in last update
