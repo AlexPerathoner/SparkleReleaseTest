@@ -30,13 +30,11 @@ jobs:
         id: latest_changes
         run: |
           python3 ./Configuration/generate_latest_changes.py
-          echo "stuff=hey" >> $GITHUB_OUTPUT
-          echo "{new_version}={$(cat new_version)}" >> $GITHUB_OUTPUT
-          echo "{title}={$(cat title)}" >> $GITHUB_OUTPUT
+          echo "new_version=$(cat new_version)" >> $GITHUB_OUTPUT
+          echo "title=$(cat title)" >> $GITHUB_OUTPUT
       - name: Print version and title
         run: |
           echo "Version: ${{ steps.latest_changes.outputs.new_version }}"
-          echo "Stuff: ${{ steps.latest_changes.outputs.stuff }}"
           echo "Title: ${{ steps.latest_changes.outputs.title }}"
       - name: Check if version already released
         run: |
