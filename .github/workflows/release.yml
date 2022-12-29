@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: xt0rted/pull-request-comment-branch@v1
         id: comment-branch
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         if: success()
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
@@ -83,7 +83,7 @@ jobs:
         run: xcodebuild -exportArchive -archivePath "${{ env.projname }}.xcarchive" -exportPath Release -exportOptionsPlist "Configuration/ExportOptions.plist"
       - name: Zip app
         run: zip -r -y Release/${{ env.projname }}.zip Release/${{ env.projname }}.app
-      - name: "Draft a release"
+      - name: Create GitHub release
         uses: softprops/action-gh-release@v1
         with:
           name: ${{ steps.latest_changes.outputs.title }}
@@ -107,6 +107,12 @@ jobs:
       - name: Create summary
         run: |
           echo "Release ${{ steps.latest_changes.outputs.new_version }} created" >> $GITHUB_STEP_SUMMARY
+      - uses: xt0rted/pull-request-comment-branch@v1 # checkout again, because the previous checkout is detached
+        id: comment-branch
+      - uses: actions/checkout@v3
+        if: success()
+        with:
+          ref: ${{ steps.comment-branch.outputs.head_ref }}
       - name: Merge PR
         uses: "pascalgn/automerge-action@v0.15.5"
         env:
@@ -114,6 +120,7 @@ jobs:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           MERGE_COMMIT_MESSAGE: "Release version ${{ steps.latest_changes.outputs.new_version }}"
           MERGE_FILTER_AUTHOR: "AlexPerathoner"
+          MERGE_ERROR_FAIL: true
       - name: Add reactions
         uses: peter-evans/create-or-update-comment@v2
         with:
