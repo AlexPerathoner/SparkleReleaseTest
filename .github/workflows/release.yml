@@ -17,8 +17,12 @@ jobs:
     environment: deploy-release
     if: github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.author_association == 'OWNER'
     steps:
-      - name: "Checkout sources"
-        uses: actions/checkout@v3
+      - uses: xt0rted/pull-request-comment-branch@v1
+        id: comment-branch
+      - uses: actions/checkout@v2
+        if: success()
+        with:
+          ref: ${{ steps.comment-branch.outputs.head_ref }}
       - name: Extract latest changes
         id: latest_changes
         run: |
@@ -110,4 +114,15 @@ jobs:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           MERGE_COMMIT_MESSAGE: "Release version ${{ steps.latest_changes.outputs.new_version }}"
           MERGE_FILTER_AUTHOR: "AlexPerathoner"
+      - name: Add reactions
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: rocket
+      - name: Add negative reaction
+        if: failure()
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: "-1"
 
