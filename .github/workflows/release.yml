@@ -98,7 +98,7 @@ jobs:
           PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
         run: |
           echo $PRIVATE_SPARKLE_KEY > ./Configuration/sparkle_private_key
-          ./Configuration/
+          ./Configuration/generate_keys -f Configuration/sparkle_private_key
           mv docs/Support/appcast.xml Release/appcast.xml
           ./Configuration/generate_appcast Release
           mv Release/appcast.xml docs/Support/appcast.xml
