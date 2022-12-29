@@ -94,7 +94,11 @@ jobs:
           zip -r -y ${{ env.projname }}.zip ${{ env.projname }}.app
           cd ..
       - name: Sign update
+        env:
+          PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
         run: |
+          echo $PRIVATE_SPARKLE_KEY > ./Configuration/sparkle_private_key
+          ./Configuration/
           mv docs/Support/appcast.xml Release/appcast.xml
           ./Configuration/generate_appcast Release
           mv Release/appcast.xml docs/Support/appcast.xml
@@ -115,6 +119,7 @@ jobs:
           rm -rf latest_changes
           rm -rf new_version
           rm -rf title
+          rm -rf Configuration/sparkle_private_key
       - name: Saving changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
