@@ -1,3 +1,6 @@
+# 1.3.8 - Fix verions
+* fix version
+
 # 1.3.7 - Sign test pt4
 * fix zip
 
