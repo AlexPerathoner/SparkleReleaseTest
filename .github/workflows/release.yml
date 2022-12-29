@@ -97,7 +97,7 @@ jobs:
         env:
           PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
         run: |
-          echo "$PRIVATE_SPARKLE_KEY" > ./Configuration/sparkle_private_key
+          echo -n "$PRIVATE_SPARKLE_KEY" > ./Configuration/sparkle_private_key
       - name: Remove files in Release
         run: |
           rm -rf Release/*.app
