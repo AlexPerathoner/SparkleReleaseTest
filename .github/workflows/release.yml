@@ -30,7 +30,7 @@ jobs:
         id: latest_changes
         run: |
           python3 ./Configuration/generate_latest_changes.py
-          echo "{stuff}={hey}" >> $GITHUB_OUTPUT
+          echo "stuff=hey" >> $GITHUB_OUTPUT
           echo "{new_version}={$(cat new_version)}" >> $GITHUB_OUTPUT
           echo "{title}={$(cat title)}" >> $GITHUB_OUTPUT
       - name: Print version and title
