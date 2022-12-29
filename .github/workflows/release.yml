@@ -41,10 +41,9 @@ jobs:
             echo "Release notes are empty" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
-      - name: Overwrite project versions in project
+      - name: Override versions in project
         run: |
-          xcrun agvtool new-marketing-version ${{ steps.latest_changes.outputs.new_version }}
-          xcrun agvtool new-version ${{ steps.latest_changes.outputs.new_version }}
+          sed -i '' "s/_VERSION = $(xcrun agvtool what-version -terse)/_VERSION = ${{ steps.latest_changes.outputs.new_version }}/g" ${{ env.projname }}.xcodeproj/project.pbxproj;
       - name: Install the Apple certificate and provisioning profile
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
@@ -87,7 +86,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           name: ${{ steps.latest_changes.outputs.title }}
-          tag_name: ${{ steps.latest_changes.outputs.new_version }}
+          tag_name: v${{ steps.latest_changes.outputs.new_version }}
           fail_on_unmatched_files: true
           body_path: latest_changes
           files: |
@@ -103,10 +102,10 @@ jobs:
       - name: Saving changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "Update version to ${{ steps.latest_changes.outputs.new_version }}"
+          commit_message: "Update version to v${{ steps.latest_changes.outputs.new_version }}"
       - name: Create summary
         run: |
-          echo "Release ${{ steps.latest_changes.outputs.new_version }} created" >> $GITHUB_STEP_SUMMARY
+          echo "Release v${{ steps.latest_changes.outputs.new_version }} created" >> $GITHUB_STEP_SUMMARY
       - uses: xt0rted/pull-request-comment-branch@v1 # checkout again, because the previous checkout is detached
         id: comment-branch-2
       - uses: actions/checkout@v3
@@ -118,7 +117,7 @@ jobs:
         env:
           MERGE_LABELS: ""
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          MERGE_COMMIT_MESSAGE: "Release version ${{ steps.latest_changes.outputs.new_version }}"
+          MERGE_COMMIT_MESSAGE: "Release version v${{ steps.latest_changes.outputs.new_version }}"
           MERGE_FILTER_AUTHOR: "AlexPerathoner"
           MERGE_ERROR_FAIL: true
       - name: Add reactions

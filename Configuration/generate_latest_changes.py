@@ -7,7 +7,7 @@ def get_latest_release_notes():
         lines = f.readlines()
         first_header = lines[0].strip()
         title = first_header.split(' - ')[1]
-        latest_version = first_header.split(' - ')[0].replace('# ', 'v')
+        latest_version = first_header.split(' - ')[0].replace('# ', '')
         lines = lines[1:]
         notes = ""
         for line in lines:
