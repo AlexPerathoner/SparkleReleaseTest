@@ -97,8 +97,7 @@ jobs:
         env:
           PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
         run: |
-          echo $PRIVATE_SPARKLE_KEY > ./Configuration/sparkle_private_key
-          ./Configuration/generate_keys -f Configuration/sparkle_private_key
+          echo "$PRIVATE_SPARKLE_KEY" > ./Configuration/sparkle_private_key
       - name: Remove files in Release
         run: |
           rm -rf Release/*.app
@@ -107,7 +106,7 @@ jobs:
       - name: Sign update
         run: | # todo add description of update
           mv docs/Support/appcast.xml Release/appcast.xml
-          ./Configuration/generate_appcast Release/
+          ./Configuration/generate_appcast --ed-key-file Configuration/sparkle_private_key Release/
           mv Release/appcast.xml docs/Support/appcast.xml
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
