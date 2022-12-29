@@ -1,3 +1,6 @@
+# 1.4.1 - test sparkle generator pt1
+* generate appcast using Sparkle tool
+
 # 1.4.0 - test sparkle sign again pt1
 * re add public key
 * generate appcast using Sparkle tool
