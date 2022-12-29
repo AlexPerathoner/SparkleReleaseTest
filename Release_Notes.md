@@ -1,3 +1,6 @@
+# 1.3.10 - Fix sign pt2
+* fix signing (maybe) pt2
+
 # 1.3.9 - Fix sign
 * fix signing (maybe)
 
