@@ -17,8 +17,12 @@ jobs:
     environment: deploy-release
     if: github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.author_association == 'OWNER'
     steps:
-      - name: "Checkout sources"
-        uses: actions/checkout@v3
+      - uses: xt0rted/pull-request-comment-branch@v1
+        id: comment-branch
+      - uses: actions/checkout@v2
+        if: success()
+        with:
+          ref: ${{ steps.comment-branch.outputs.head_ref }}
       - name: Extract latest changes
         id: latest_changes
         run: |
