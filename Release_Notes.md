@@ -1,3 +1,6 @@
+# 1.3.11 - remove public key
+* remove public key
+
 # 1.3.10 - Fix sign pt2
 * fix signing (maybe) pt2
 
