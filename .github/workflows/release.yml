@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: ["master"]
     # types: [closed]
+  check_suite:
+    types:
+      - completed
 
 concurrency:
   group: publish-release${{ github.ref }}
@@ -27,6 +30,7 @@ jobs:
         id: latest_changes
         run: |
           python3 ./Configuration/generate_latest_changes.py
+          echo "asd" > new_version
           echo "{new_version}=$(cat new_version)" >> $GITHUB_STATE
           echo "{title}=$(cat title)" >> $GITHUB_STATE
       - name: Print version and title
