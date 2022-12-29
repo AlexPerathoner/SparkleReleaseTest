@@ -1,3 +1,6 @@
+# 1.3.1 - New fixes
+* checking out branch
+
 # 1.3.0 - New minor version
 * Some minor changes
 
