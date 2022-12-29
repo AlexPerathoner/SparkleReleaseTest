@@ -10,12 +10,16 @@ def get_latest_release_notes():
         new_version = first_header.split(' - ')[0].replace('# ', '')
         lines = lines[1:]
         latest_changes = ""
+        old_version = ""
         for line in lines:
             if line.strip().startswith('*'):
                 latest_changes += line.strip() + "\n"
             elif line.strip().startswith('#'):
                 old_version = line.strip().split(' - ')[0].replace('# ', '')
                 break
+        # if old_version is not defined, then there is only one version
+        if not old_version:
+            old_version = new_version
         return title, new_version, old_version, latest_changes
 
 if __name__ == '__main__':
