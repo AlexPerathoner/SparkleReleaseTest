@@ -1,3 +1,7 @@
+# 1.4.0 - test sparkle sign again pt1
+* re add public key
+* generate appcast using Sparkle tool
+
 # 1.3.12 - remove public key pt2
 * remove public key
 
