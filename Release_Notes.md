@@ -1,3 +1,5 @@
+# 1.2.2 - Testing
+
 # 1.2.1 - Fixing Stuff
 * '/release' will automaticallly merge the PR
 
