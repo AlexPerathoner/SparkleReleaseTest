@@ -101,7 +101,7 @@ jobs:
           rm -rf Release/*.app
           rm -rf Release/*.log
           rm -rf Release/*.plist
-          mv latest_changes Release/${{ env.projname }}.html
+          cp latest_changes Release/${{ env.projname }}.html
       - name: Sign update
         run: |
           mv docs/Support/appcast.xml Release/appcast.xml
@@ -125,6 +125,7 @@ jobs:
           rm -rf Release
           rm -rf ${{ env.projname }}.xcarchive
           rm -rf ${{ env.projname }}.zip
+          rm -rf latest_changes
           rm -rf new_version
           rm -rf title
           rm -rf Configuration/sparkle_private_key
