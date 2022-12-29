@@ -19,16 +19,8 @@ jobs:
     name: "Publish binaries for release"
     runs-on: macos-12
     environment: deploy-release
-
+    # if: github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.author_association == 'OWNER'
     steps:
-      - name: "Check if comment is /release"
-        if: github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.author_association == 'OWNER'
-        run: |
-          echo "Comment is /release"
-          echo "RELEASE=true" >> $GITHUB_ENV
-        else:
-          echo "Comment is not /release"
-          exit 1
       - name: "Checkout sources"
         uses: actions/checkout@v3
       - name: Extract latest changes
@@ -38,7 +30,6 @@ jobs:
           echo "{new_version}=$(cat new_version)" >> $GITHUB_STATE
           echo "{title}=$(cat title)" >> $GITHUB_STATE
       - name: "Check if version already released"
-        if: env.RELEASE == 'true'
         run: |
           if [[ $(xcrun agvtool what-version -terse) == $(cat new_version) ]]; then
             echo "Version already released" >> $GITHUB_STEP_SUMMARY
