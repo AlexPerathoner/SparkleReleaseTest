@@ -101,7 +101,10 @@ jobs:
           rm -rf Release/*.app
           rm -rf Release/*.log
           rm -rf Release/*.plist
-          cp latest_changes Release/${{ env.projname }}.html
+      - name: Install python dependencies
+        run: pip3 install -r Configuration/requirements.txt
+      - name: Generate Sparkle notes
+        run: python3 ./Configuration/generate_html_for_spark_release.py
       - name: Sign update
         run: |
           mv docs/Support/appcast.xml Release/appcast.xml
