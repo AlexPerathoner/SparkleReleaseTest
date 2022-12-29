@@ -4,7 +4,5 @@
 <dict>
 	<key>SUFeedURL</key>
 	<string>https://alexperathoner.github.io/SparkleReleaseTest/Support/appcast.xml</string>
-	<key>SUPublicEDKey</key>
-	<string>Ve1wpiN1iQL4YhCH2LXrKARQtgzmp+E/F4k/uyuZDsQ=</string>
 </dict>
 </plist>
