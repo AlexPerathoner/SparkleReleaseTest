@@ -29,12 +29,8 @@ jobs:
       - name: Extract latest changes
         run: |
           python3 ./Configuration/generate_latest_changes.py
-          echo "asd" > new_version
-      - name: asd
-        id: latest_changes
-        run: |
-          echo "{new_version}=$(cat new_version)" >> $GITHUB_STATE
-          echo "{title}=$(cat title)" >> $GITHUB_STATE
+          echo "{new_version}={$(cat new_version)}" >> $GITHUB_STATE
+          echo "{title}={$(cat title)}" >> $GITHUB_STATE
       - name: Print version and title
         run: |
           echo "Version: ${{ steps.latest_changes.outputs.new_version }}"
