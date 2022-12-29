@@ -1,3 +1,6 @@
+# 1.3.12 - remove public key pt2
+* remove public key
+
 # 1.3.11 - remove public key
 * remove public key
 
