@@ -10,6 +10,8 @@ concurrency:
 env:
   projname: testSparkleRelease
 
+# please add some comments
+
 jobs:
   release:
     name: "Publish binaries for release"
@@ -28,6 +30,7 @@ jobs:
         run: |
           python3 ./Configuration/generate_latest_changes.py
           echo "new_version=$(cat new_version)" >> $GITHUB_OUTPUT
+          echo "old_version=$(cat new_version)" >> $GITHUB_OUTPUT
           echo "title=$(cat title)" >> $GITHUB_OUTPUT
       - name: Check if version already released
         run: |
