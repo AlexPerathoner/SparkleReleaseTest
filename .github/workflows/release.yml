@@ -10,6 +10,8 @@ concurrency:
 env:
   projname: testSparkleRelease
 
+# please add some comments
+
 jobs:
   release:
     name: "Publish binaries for release"
@@ -17,6 +19,11 @@ jobs:
     environment: deploy-release
     if: github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.author_association == 'OWNER'
     steps:
+      - name: Add reactions
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: rocket
       - uses: xt0rted/pull-request-comment-branch@v1
         id: comment-branch
       - uses: actions/checkout@v3
@@ -28,6 +35,7 @@ jobs:
         run: |
           python3 ./Configuration/generate_latest_changes.py
           echo "new_version=$(cat new_version)" >> $GITHUB_OUTPUT
+          echo "old_version=$(cat new_version)" >> $GITHUB_OUTPUT
           echo "title=$(cat title)" >> $GITHUB_OUTPUT
       - name: Check if version already released
         run: |
@@ -124,7 +132,7 @@ jobs:
         uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ github.event.comment.id }}
-          reactions: rocket
+          reactions: hooray
       - name: Add negative reaction
         if: failure()
         uses: peter-evans/create-or-update-comment@v2
