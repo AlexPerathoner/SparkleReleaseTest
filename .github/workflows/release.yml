@@ -89,7 +89,7 @@ jobs:
       - name: Export app
         run: xcodebuild -exportArchive -archivePath "${{ env.projname }}.xcarchive" -exportPath Release -exportOptionsPlist "Configuration/ExportOptions.plist"
       - name: Sign app
-        run: codesign -f --preserve-metadata=identifier,entitlements,resource-rules,requirements -s "Alexander Perathoner" "Release/${{ env.projname }}.app
+        run: codesign -f --preserve-metadata=identifier,entitlements,resource-rules,requirements -s "Alexander Perathoner" Release/${{ env.projname }}.app
       - name: Zip app
         run: zip -r -y Release/${{ env.projname }}.zip Release/${{ env.projname }}.app
       - name: Create GitHub release
