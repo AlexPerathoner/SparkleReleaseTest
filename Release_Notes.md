@@ -1,3 +1,6 @@
+# 1.3.9 - Fix sign
+* fix signing (maybe)
+
 # 1.3.8 - Fix verions
 * fix version
 
