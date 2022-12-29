@@ -1,3 +1,6 @@
+# 1.3.6 - Sign test pt3
+* some more changes
+
 # 1.3.5 - Sign test pt2
 * some more changes
 
