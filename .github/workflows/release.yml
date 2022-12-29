@@ -88,6 +88,8 @@ jobs:
         run: xcodebuild clean archive -project ${{ env.projname }}.xcodeproj -scheme ${{ env.projname }} -archivePath ${{ env.projname }}
       - name: Export app
         run: xcodebuild -exportArchive -archivePath "${{ env.projname }}.xcarchive" -exportPath Release -exportOptionsPlist "Configuration/ExportOptions.plist"
+      - name: Check signing
+        run: codesign --deep -vvv --verify Release/${{ env.projname }}.app
       - name: Zip app
         run: |
           cd Release
