@@ -88,13 +88,16 @@ jobs:
         run: xcodebuild clean archive -project ${{ env.projname }}.xcodeproj -scheme ${{ env.projname }} -archivePath ${{ env.projname }}
       - name: Export app
         run: xcodebuild -exportArchive -archivePath "${{ env.projname }}.xcarchive" -exportPath Release -exportOptionsPlist "Configuration/ExportOptions.plist"
-      - name: Check signing
-        run: codesign --deep -vvv --verify Release/${{ env.projname }}.app
       - name: Zip app
         run: |
           cd Release
           zip -r -y ${{ env.projname }}.zip ${{ env.projname }}.app
           cd ..
+      - name: Sign update
+        run: |
+          mv docs/Support/appcast.xml Release/appcast.xml
+          ./Configuration/generate_appcast Release
+          mv Release/appcast.xml docs/Support/appcast.xml
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
         with:
