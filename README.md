@@ -24,4 +24,3 @@ Todo:
 
 * https://sparkle-project.org/documentation/
 * https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development
-some changes
