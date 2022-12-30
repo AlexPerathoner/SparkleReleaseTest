@@ -62,6 +62,7 @@ jobs:
         run: |
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          DISTRIBUTE_CERTIFICATE_PATH=$RUNNER_TEMP/distribute_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
