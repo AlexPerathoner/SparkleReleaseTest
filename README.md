@@ -19,6 +19,8 @@ Todo:
 - [x] /release command triggers action and release
 - [ ] signing not working
 - [x] update version in project
+- [ ] if MR failed, don't release new version
+- [ ] if MR failed, downgrade version in project
 
 ## Important links
 
