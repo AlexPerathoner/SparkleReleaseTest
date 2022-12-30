@@ -13,6 +13,6 @@ Test repository to create a GitHub Action which
 Todo: 
 - [x] /release command triggers action and release
 - [ ] signing not working
-- [ ] update version in project
+- [x] update version in project
 
 some changes
