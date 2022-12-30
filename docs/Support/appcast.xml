@@ -28,5 +28,19 @@
             <sparkle:minimumSystemVersion>13.1</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/AlexPerathoner/SparkleReleaseTest/releases/download/v1.4.3/testSparkleRelease.zip" length="1228388" type="application/octet-stream" sparkle:edSignature="MEgPooupCLxfgJrIanOIAXNT8S0m9RHjZApd2EcuyIslIDWXDWEFTH8cj1UwIAzjT4twARpkrs2BaF+MKxQ2Cw=="/>
         </item>
+        <item>
+            <title>1.4.1</title>
+            <pubDate>Fri, 30 Dec 2022 09:13:46 +0100</pubDate>
+            <link>https://github.com/AlexPerathoner/testSparkleRelease/releases</link>
+            <sparkle:version>1.4.1</sparkle:version>
+            <sparkle:shortVersionString>1.4.1</sparkle:shortVersionString>
+            <description><![CDATA[<h1>test sparkle generator pt2</h1>
+<ul>
+<li>more generate appcast using Sparkle tool</li>
+<li>even more</li>
+</ul>]]></description>
+            <sparkle:minimumSystemVersion>13.1</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/AlexPerathoner/SparkleReleaseTest/releases/download/v1.4.3/testSparkleRelease.zip" length="1374874" type="application/octet-stream" sparkle:edSignature="paLhdbc/MkQ3DhVlkAjgo/QB48l7p5YFqwkw1/21JziQletWPSvkYkO3/SOnqdQz26O+2P0TlcoMVgdWlcqVCg=="/>
+        </item>
     </channel>
 </rss>
