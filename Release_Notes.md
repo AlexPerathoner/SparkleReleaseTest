@@ -1,3 +1,6 @@
+# 1.4.5 - test distribution cert
+* distribution cert
+
 # 1.4.4 - test sparkle generator pt4
 * even more and more
 
