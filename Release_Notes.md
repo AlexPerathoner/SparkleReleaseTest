@@ -1,3 +1,6 @@
+# 1.4.6 - test distribution cert pt2
+* distribution cert
+
 # 1.4.5 - test distribution cert
 * distribution cert
 
