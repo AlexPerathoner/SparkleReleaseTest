@@ -115,8 +115,8 @@ jobs:
         run: |
           ./Configuration/generate_appcast \
               --ed-key-file Configuration/sparkle_private_key \
-              --link https://github.com/AlexPerathoner/testSparkleRelease/releases \
-              --download-url-prefix https://github.com/AlexPerathoner/SparkleReleaseTest/releases/download/v1.4.3/ \
+              --link https://github.com/AlexPerathoner/${{ env.projname }}/releases \
+              --download-url-prefix https://github.com/AlexPerathoner/SparkleReleaseTest/releases/download/v${{ steps.latest_changes.outputs.new_version }} \
               -o docs/Support/appcast.xml \
               Release/
       - name: Create GitHub release
