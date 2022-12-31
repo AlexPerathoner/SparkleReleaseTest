@@ -4,18 +4,17 @@ This is a example project to show how to create a GitHub Action to automatically
 
 ## What does the workflow do?
 
-1. The owner creates a PR to `master` and comments `/release`. If the PR is mergeable, the action will:
+The owner creates a PR to `master` and comments `/release`. If the PR is mergeable, this triggers a GitHub Action which will:
 1. Extrapolate from the file `Release_notes.md` the:
     * latest version number
     * its release notes
     * its title
     * previous version number
-2. Replace all occurences of the previous version number with the new version number within the Xcode project
+1. Replace all occurences of the previous version number with the new version number within the Xcode project
 1. Archive and export the Xcode project as a .app
-3. Zip the .app
-4. Run the `generate_appcast` tool from Sparkle (private Sparkle key necessary, also added to GitHub secrets like in step 4), which will create/update the appcast.xml file in the Docs/Support folder
-5. Create a GitHub release with the zip, the release note, the latest version and the title
-6. Merge the PR, which triggers the GitHub action to build GitHub Pages, which will host the appcast.xml file. The update is so available for the users.
+4. Run the `generate_appcast` tool from Sparkle, which will create/update the appcast.xml file in the Docs/Support folder
+5. Create a GitHub release with the zipped app, the release note, the latest version and the title
+6. Merge the PR, which triggers the GitHub action to build GitHub Pages, which will host the `appcast.xml` file. The update is so available for all users.
 
 
 ## Necessary steps to make this work

@@ -125,7 +125,7 @@ jobs:
         run: |
           ./Configuration/generate_appcast \
               --ed-key-file Configuration/sparkle_private_key \
-              --link https://github.com/AlexPerathoner/${{ github.event.repository.name }} /releases \
+              --link https://github.com/AlexPerathoner/${{ github.event.repository.name }}/releases \
               --download-url-prefix https://github.com/AlexPerathoner/${{ github.event.repository.name }}/releases/download/v${{ steps.latest_changes.outputs.new_version }}/ \
               -o docs/Support/appcast.xml \
               Release/
