@@ -10,8 +10,6 @@ concurrency:
 env:
   projname: testSparkleRelease
 
-# please add some comments
-
 jobs:
   release:
     name: "Create Release"
