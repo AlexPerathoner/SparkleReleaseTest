@@ -8,7 +8,5 @@
 	<string>Apple Development</string>
 	<key>signingStyle</key>
 	<string>manual</string>
-	<key>teamID</key>
-	<string>XX9N244QQT</string>
 </dict>
 </plist>

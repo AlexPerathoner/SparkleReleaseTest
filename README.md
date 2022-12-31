@@ -35,7 +35,6 @@ The owner creates a PR to `master` and comments `/release`. If the PR is mergeab
 * In the Xcode project set the project and marketing versions to the same value (Project > General > Identity > Version and Build)
 * Add an item in the Release_Notes.md file for the current version, with the title `# <version> - <title>`, e.g. `# 1.0.0 - Initial Release`, this will be used by the workflow to get the previous version number
 * Create a Configuration folder and copy all the files from the `Configuration` folder in this repo to it
-    * update `export_options.plits` with your Team ID
 
 
 ## Important links
