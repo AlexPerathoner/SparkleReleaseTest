@@ -3,6 +3,20 @@
     <channel>
         <title>testSparkleRelease</title>
         <item>
+            <title>1.4.12</title>
+            <pubDate>Sat, 31 Dec 2022 13:27:09 +0000</pubDate>
+            <link>https://github.com/AlexPerathoner/SparkleReleaseTest/releases</link>
+            <sparkle:version>1.4.12</sparkle:version>
+            <sparkle:shortVersionString>1.4.12</sparkle:shortVersionString>
+            <description><![CDATA[<h1>test for merge conflict</h1>
+<ul>
+<li>some more tests</li>
+<li>test for merge conflict</li>
+</ul>]]></description>
+            <sparkle:minimumSystemVersion>13.1</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/AlexPerathoner/SparkleReleaseTest/releases/download/v1.4.12/testSparkleRelease.zip" length="1228399" type="application/octet-stream" sparkle:edSignature="JZe1mBUCtsAz7v+vhWbrG+sXXYFZrMugizdUAmkAljyyzwBnEBHsujUEpc/0ohRAr3WtbJJUyZcQi8+qPy5iDw=="/>
+        </item>
+        <item>
             <title>1.4.11</title>
             <pubDate>Fri, 30 Dec 2022 16:03:41 +0000</pubDate>
             <link>https://github.com/AlexPerathoner/SparkleReleaseTest/releases</link>
@@ -28,19 +42,6 @@
 </ul>]]></description>
             <sparkle:minimumSystemVersion>13.1</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/AlexPerathoner/SparkleReleaseTest/releases/download/testSparkleRelease.zip" length="1228310" type="application/octet-stream" sparkle:edSignature="EBl5G+YbbFFszfzf6jPjKyFEXpFrBQWW2eVcQQm5D/waF3tEg2usnRCH7paAEjJ2xr7YynNbEPdP3UmZBFjADw=="/>
-        </item>
-        <item>
-            <title>1.4.9</title>
-            <pubDate>Fri, 30 Dec 2022 15:42:54 +0000</pubDate>
-            <link>https://github.com/AlexPerathoner/testSparkleRelease/releases</link>
-            <sparkle:version>1.4.9</sparkle:version>
-            <sparkle:shortVersionString>1.4.9</sparkle:shortVersionString>
-            <description><![CDATA[<h1>test distribution prof pt3</h1>
-<ul>
-<li>distribution prov profile</li>
-</ul>]]></description>
-            <sparkle:minimumSystemVersion>13.1</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/AlexPerathoner/SparkleReleaseTest/releases/download/v1.4.3/testSparkleRelease.zip" length="1228294" type="application/octet-stream" sparkle:edSignature="DknPuG5jv5QAd4nuMV0zARa5mCUaDO0lnDsAFDSTYhOFeJZOkWf34LK+6ddFwxI13Nr5S/Xx03XPlgeUqOK3Bw=="/>
         </item>
     </channel>
 </rss>
