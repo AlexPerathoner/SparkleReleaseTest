@@ -14,7 +14,7 @@ env:
 
 jobs:
   release:
-    name: "Publish binaries for release"
+    name: "Create Release"
     runs-on: macos-12
     environment: deploy-release
     if: github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.user.login == "${{ github.repository_owner }}"
