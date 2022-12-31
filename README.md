@@ -7,8 +7,9 @@ This is a example project to show how to create a GitHub Action to automatically
 1. The owner creates a PR to `master` and comments `/release`. If the PR is mergeable, the action will:
 1. Extrapolate from the file `Release_notes.md` the:
     * latest version number
-    * the previous version number
-    * the release notes for the latest version
+    * its release notes
+    * its title
+    * previous version number
 2. Replace all occurences of the previous version number with the new version number within the Xcode project
 1. Archive and export the Xcode project as a .app
 3. Zip the .app
@@ -29,6 +30,9 @@ This is a example project to show how to create a GitHub Action to automatically
     * Set the `SUPublicEDKey` to the public key, see [here](https://sparkle-project.org/documentation/) on how to generate one
 * In the Xcode project set the project and marketing versions to the same value (Project > General > Identity > Version and Build)
 * Add an item in the Release_Notes.md file for the current version, with the title `# <version> - <title>`, e.g. `# 1.0.0 - Initial Release`, this will be used by the workflow to get the previous version number
+* Create a Configuration folder and copy all the files from the `Configuration` folder in this repo to it
+    * update `ExportOptions.plits` with your Team ID
+
 
 ## Important links
 
