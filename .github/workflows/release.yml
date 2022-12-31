@@ -102,7 +102,7 @@ jobs:
       - name: Build and archive # create archive
         run: xcodebuild clean archive -project ${{ env.projname }}.xcodeproj -scheme ${{ env.projname }} -archivePath ${{ env.projname }}
       - name: Export app # create .app
-        run: xcodebuild -exportArchive -archivePath "${{ env.projname }}.xcarchive" -exportPath Release -exportOptionsPlist "Configuration/ExportOptions.plist"
+        run: xcodebuild -exportArchive -archivePath "${{ env.projname }}.xcarchive" -exportPath Release -exportOptionsPlist "Configuration/export_options.plist"
       - name: Zip app # zip .app
         run: |
           cd Release
@@ -119,7 +119,7 @@ jobs:
       - name: Generate Sparkle notes # generate Sparkle release notes (convert Markdown to HTML)
         run: |
           pip3 install -r Configuration/requirements.txt
-          python3 ./Configuration/generate_html_for_spark_release.py
+          python3 ./Configuration/generate_html_for_sparkle_release.py
           mv Release/latest_changes.html Release/${{ env.projname }}.html
       - name: Update appcast # generate / update appcast.xml with edDSA key
         run: |
