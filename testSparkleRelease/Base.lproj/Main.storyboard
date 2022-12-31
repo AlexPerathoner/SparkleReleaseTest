@@ -709,9 +709,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YDw-p8-vQi">
-                                <rect key="frame" x="177" y="129" width="126" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YDw-p8-vQi">
+                                <rect key="frame" x="177" y="118" width="126" height="32"/>
                                 <buttonCell key="cell" type="push" title="Check updates" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Wzd-RO-Xkc">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -721,6 +720,10 @@
                                 </connections>
                             </button>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="YDw-p8-vQi" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="3qY-jT-JD1"/>
+                            <constraint firstItem="YDw-p8-vQi" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="KNq-jZ-qp2"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
