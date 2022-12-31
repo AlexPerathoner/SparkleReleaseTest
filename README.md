@@ -2,7 +2,7 @@
 
 This is a example project to show how to create a GitHub Action to automatically create a release for a macOS app, using Sparkle.
 
-Complete guide on this project can be found [here](https://medium.com/@alex.pera/automating-xcode-sparkle-releases-with-github-actions-bd14f3ca92aa).
+Complete guide to this project can be found [here](https://medium.com/@alex.pera/automating-xcode-sparkle-releases-with-github-actions-bd14f3ca92aa).
 
 ## What does the workflow do?
 
