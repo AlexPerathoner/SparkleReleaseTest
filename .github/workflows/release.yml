@@ -106,7 +106,7 @@ jobs:
       - name: Zip app # zip .app
         run: |
           cd Release
-          zip -r -y ${{ env.projname }}.zip ${{ env.projname }}.app
+          ditto -c -k --sequesterRsrc --keepParent ${{ env.projname }}.app ${{ env.projname }}.zip
           cd ..
       - name: Prepare Sparkle update creation # Import Sparkle private key, remove unnecessary files in Release folder
         env:
