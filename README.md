@@ -5,7 +5,7 @@ This is a example project to show how to create a GitHub Action to automatically
 ## What does the workflow do?
 
 The owner creates a PR to `master` and comments `/release`. If the PR is mergeable, this triggers a GitHub Action which will:
-1. Extrapolate from `Release_notes.md` the:
+1. Extrapolate from `Release_Notes.md` the:
     * latest version number
     * its release notes
     * its title
