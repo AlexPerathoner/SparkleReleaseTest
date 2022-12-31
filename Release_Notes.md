@@ -1,3 +1,6 @@
+# 1.4.12 - test for merge conflict
+* test for merge conflict
+
 # 1.4.11 - test distribution prof pt5
 * fix link
 * distribution prov profile
