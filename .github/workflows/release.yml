@@ -52,6 +52,7 @@ jobs:
       - name: Check if beta channel # extract channel from comment: comments including "beta" will be released to the beta channel
         id: beta-channel
         if: contains(github.event.comment.body, '${{ env.beta-channel-name }}')
+        run: Echo "beta channel specified"
       - name: Extract channel
         id: channel
         run: |
