@@ -125,6 +125,7 @@ jobs:
         env:
           PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
         run: |
+          echo -n "$PRIVATE_SPARKLE_KEY" > ./Configuration/sparkle_private_key
           rm -rf Release/*.app
           rm -rf Release/*.log
           rm -rf Release/*.plist
@@ -134,16 +135,17 @@ jobs:
           python3 ./Configuration/generate_html_for_sparkle_release.py
           mv Release/latest_changes.html Release/${{ env.projname }}.html
       - name: Update appcast # generate / update appcast.xml with edDSA key
-        id: appcast
         run: |
-          echo "$PRIVATE_SPARKLE_KEY" | ./Configuration/generate_appcast \
-              --ed-key-file - \
+          ./Configuration/generate_appcast \
+              --ed-key-file Configuration/sparkle_private_key \
               --link https://github.com/AlexPerathoner/${{ github.event.repository.name }}/releases \
               --download-url-prefix https://github.com/AlexPerathoner/${{ github.event.repository.name }}/releases/download/v${{ steps.latest_changes.outputs.new_version }}/ \
               --channel ${{ steps.channel.outputs.channel }} \
               -o docs/Support/appcast.xml \
               Release/
-          echo "appcast=$(cat docs/Support/appcast.xml)" >> $GITHUB_OUTPUT
+      - name: Saving appcast to output
+        id: appcast
+        run: echo "appcast=$(cat docs/Support/appcast.xml)" >> $GITHUB_OUTPUT
       - name: Create GitHub release # Upload .zip to GitHub release
         uses: softprops/action-gh-release@v1
         with:
