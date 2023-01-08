@@ -736,13 +736,16 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="a" destination="V88-eQ-hRA" id="Adi-Vd-Eiu"/>
                         <outlet property="checkBetaUpdatesOutlet" destination="1kP-We-S56" id="mMg-sd-82Q"/>
                         <outlet property="updaterController" destination="V88-eQ-hRA" id="UrQ-el-QxA"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-                <customObject id="V88-eQ-hRA" customClass="SPUStandardUpdaterController"/>
+                <customObject id="V88-eQ-hRA" customClass="SPUStandardUpdaterController">
+                    <connections>
+                        <outlet property="updaterDelegate" destination="XfG-lQ-9wD" id="iNf-UB-BuH"/>
+                    </connections>
+                </customObject>
             </objects>
             <point key="canvasLocation" x="75" y="655"/>
         </scene>
