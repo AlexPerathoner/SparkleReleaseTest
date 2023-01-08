@@ -110,7 +110,6 @@ jobs:
         env:
           PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
         run: |
-          echo -n "$PRIVATE_SPARKLE_KEY" > ./Configuration/sparkle_private_key
           rm -rf Release/*.app
           rm -rf Release/*.log
           rm -rf Release/*.plist
@@ -121,8 +120,8 @@ jobs:
           mv Release/latest_changes.html Release/${{ env.projname }}.html
       - name: Update appcast # generate / update appcast.xml with edDSA key
         run: |
-          ./Configuration/generate_appcast \
-              --ed-key-file Configuration/sparkle_private_key \
+          echo "$PRIVATE_SPARKLE_KEY" | ./Configuration/generate_appcast \
+              --ed-key-file - \
               --link https://github.com/AlexPerathoner/${{ github.event.repository.name }}/releases \
               --download-url-prefix https://github.com/AlexPerathoner/${{ github.event.repository.name }}/releases/download/v${{ steps.latest_changes.outputs.new_version }}/ \
               -o docs/Support/appcast.xml \
