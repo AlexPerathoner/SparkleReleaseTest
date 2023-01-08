@@ -145,7 +145,7 @@ jobs:
               Release/
       - name: Saving appcast to output
         id: appcast
-        run: echo "appcast=$(cat docs/Support/appcast.xml)" >> $GITHUB_OUTPUT
+        run: echo "appcast=$(cat new_version)" >> $GITHUB_OUTPUT
       - name: Create GitHub release # Upload .zip to GitHub release
         uses: softprops/action-gh-release@v1
         with:
@@ -156,7 +156,6 @@ jobs:
           files: Release/${{ env.projname }}.zip
           prerelease: ${{ steps.channel.outputs.prerelease }}
       - name: Cleanup # remove all build files, keys, etc.
-        if: ${{ steps.channel.outputs.prerelease == 'false' }}
         run: |
           rm -rf Release
           rm -rf ${{ env.projname }}.xcarchive
