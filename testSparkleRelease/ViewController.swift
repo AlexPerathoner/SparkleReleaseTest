@@ -9,12 +9,10 @@ import Cocoa
 import Sparkle
 
 class ViewController: NSViewController, SPUUpdaterDelegate {
-    
-    @IBOutlet var a: SPUStandardUpdaterController!
     @IBOutlet weak var checkBetaUpdatesOutlet: NSButton!
     
     override func viewDidLoad() {
-        super.viewDidLoad()        
+        super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
