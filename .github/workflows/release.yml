@@ -172,7 +172,7 @@ jobs:
           commit_message: "Update version to v${{ steps.latest_changes.outputs.new_version }}"
       - name: Create summary # create summary for PR
         run: |
-          echo "Release v${{ steps.latest_changes.outputs.new_version }} created. Prerelease: ${{ steps.channel.outputs.prerelease }}" > summary
+          echo "Release v${{ steps.latest_changes.outputs.new_version }} created. Prerelease: ${{ steps.channel.outputs.prerelease }}" > $GITHUB_STEP_SUMMARY
 
       - uses: actions/checkout@v3 # checkout again, because the previous checkout is detached
         if: success() && ${{ steps.channel.outputs.prerelease == 'false' }}
