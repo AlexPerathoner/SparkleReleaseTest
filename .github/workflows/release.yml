@@ -52,16 +52,18 @@ jobs:
       - name: Check if beta channel # extract channel from comment: comments including "beta" will be released to the beta channel
         id: beta-channel
         if: contains(github.event.comment.body, '${{ env.beta-channel-name }}')
-        run: Echo "beta channel specified"
+        run: echo "beta channel specified ${{ github.event.comment.body }}"
       - name: Extract channel
         id: channel
         run: |
           if [[ ${{ steps.beta-channel.outcome }} == "success" ]]; then
             echo "channel=${{ env.beta-channel-name }}" >> $GITHUB_OUTPUT
             echo "prerelease=true" >> $GITHUB_OUTPUT
+            echo "Beta Release!"
           else
             echo "channel=default" >> $GITHUB_OUTPUT
             echo "prerelease=false" >> $GITHUB_OUTPUT
+            echo "Release!"
           fi
       - name: Check if version already released # prevent releasing the same version twice
         run: |
