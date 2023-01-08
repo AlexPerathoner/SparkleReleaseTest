@@ -48,6 +48,14 @@ jobs:
           echo "new_version=$(cat new_version)" >> $GITHUB_OUTPUT
           echo "old_version=$(cat new_version)" >> $GITHUB_OUTPUT
           echo "title=$(cat title)" >> $GITHUB_OUTPUT
+      - name: Extract channel # extract channel from comment: comments including "beta" will be released to the beta channel
+        id: channel
+        run: |
+          if contains(github.event.comment.body, 'beta') then
+            echo "channel=beta" >> $GITHUB_OUTPUT
+          else
+            echo "channel=default" >> $GITHUB_OUTPUT
+          fi
       - name: Check if version already released # prevent releasing the same version twice
         run: |
           if [[ $(xcrun agvtool what-version -terse) == $(cat new_version) ]]; then
@@ -124,6 +132,7 @@ jobs:
               --ed-key-file - \
               --link https://github.com/AlexPerathoner/${{ github.event.repository.name }}/releases \
               --download-url-prefix https://github.com/AlexPerathoner/${{ github.event.repository.name }}/releases/download/v${{ steps.latest_changes.outputs.new_version }}/ \
+              --channel ${{ steps.channel.outputs.channel }} \
               -o docs/Support/appcast.xml \
               Release/
       - name: Create GitHub release # Upload .zip to GitHub release
