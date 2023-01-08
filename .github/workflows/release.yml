@@ -9,6 +9,7 @@ concurrency:
 
 env:
   projname: testSparkleRelease
+  beta-channel-name: "beta"
 
 jobs:
   release:
@@ -51,8 +52,8 @@ jobs:
       - name: Extract channel # extract channel from comment: comments including "beta" will be released to the beta channel
         id: channel
         run: |
-          if contains(github.event.comment.body, 'beta') then
-            echo "channel=beta" >> $GITHUB_OUTPUT
+          if $(contains(github.event.comment.body, 'beta')) then
+            echo "channel=${{ env.beta-channel-name }}" >> $GITHUB_OUTPUT
           else
             echo "channel=default" >> $GITHUB_OUTPUT
           fi
