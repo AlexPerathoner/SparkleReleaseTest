@@ -6,9 +6,12 @@
 //
 
 import Cocoa
+import Sparkle
 
-class ViewController: NSViewController {
-
+class ViewController: NSViewController, SPUUpdaterDelegate {
+    
+    @IBOutlet weak var checkBetaUpdatesOutlet: NSButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -18,6 +21,14 @@ class ViewController: NSViewController {
     override var representedObject: Any? {
         didSet {
         // Update the view, if already loaded.
+        }
+    }
+    
+    func allowedChannels(for updater: SPUUpdater) -> Set<String> {
+        if(checkBetaUpdatesOutlet.state == .on) {
+            return Set(["beta"])
+        } else {
+            return Set()
         }
     }
 

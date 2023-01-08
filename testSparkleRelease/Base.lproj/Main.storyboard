@@ -706,11 +706,11 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="testSparkleRelease" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="290"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YDw-p8-vQi">
-                                <rect key="frame" x="177" y="118" width="126" height="32"/>
+                                <rect key="frame" x="177" y="128" width="126" height="32"/>
                                 <buttonCell key="cell" type="push" title="Check updates" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Wzd-RO-Xkc">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -719,12 +719,26 @@
                                     <action selector="checkForUpdates:" target="V88-eQ-hRA" id="UXy-Ed-St0"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1kP-We-S56">
+                                <rect key="frame" x="186" y="174" width="107" height="18"/>
+                                <buttonCell key="cell" type="check" title="Beta updates" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="bUR-qL-TM3">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="YDw-p8-vQi" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="3qY-jT-JD1"/>
+                            <constraint firstItem="1kP-We-S56" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="7Zq-P3-5St"/>
+                            <constraint firstItem="1kP-We-S56" firstAttribute="top" relation="greaterThanOrEqual" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" id="GNT-1O-TQ6"/>
                             <constraint firstItem="YDw-p8-vQi" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="KNq-jZ-qp2"/>
+                            <constraint firstItem="YDw-p8-vQi" firstAttribute="top" secondItem="1kP-We-S56" secondAttribute="bottom" constant="20" symbolic="YES" id="lvq-D2-YnE"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="checkBetaUpdatesOutlet" destination="1kP-We-S56" id="mMg-sd-82Q"/>
+                        <outlet property="updaterController" destination="V88-eQ-hRA" id="UrQ-el-QxA"/>
+                    </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <customObject id="V88-eQ-hRA" customClass="SPUStandardUpdaterController"/>
