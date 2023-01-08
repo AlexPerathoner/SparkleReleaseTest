@@ -52,7 +52,7 @@ jobs:
       - name: Check if Beta release # extract channel from comment: comments including "beta" will be released to the beta channel
         id: channel
         run: |
-          if [ ${{ contains(github.event.comment.body, 'beta')}} ]; then
+          if [ ${{ contains(github.event.comment.body, 'beta')}} = 'true' ]; then
             echo "channel=${{ env.beta-channel-name }}" >> $GITHUB_OUTPUT
             echo "prerelease=true" >> $GITHUB_OUTPUT
             echo "Beta Release!"
