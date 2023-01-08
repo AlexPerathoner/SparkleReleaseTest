@@ -191,7 +191,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: appcast
-          path: docs/Support/appcast.xml
+          path: docs/Support
       - name: Saving appcast # commits only appcast to main
         uses: stefanzweifel/git-auto-commit-action@v4
         id: commit-appcast
