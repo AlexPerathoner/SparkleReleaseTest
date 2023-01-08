@@ -13,10 +13,10 @@ env:
 
 jobs:
   release:
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.user.login == github.repository_owner }}
     name: "Create Release"
     runs-on: macos-12
     environment: deploy-release
-    if: github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.user.login == "${{ github.repository_owner }}"
     steps:
       - name: Add reactions # adding reactions to the comment to show that the action is running
         uses: peter-evans/create-or-update-comment@v2
@@ -49,14 +49,10 @@ jobs:
           echo "new_version=$(cat new_version)" >> $GITHUB_OUTPUT
           echo "old_version=$(cat new_version)" >> $GITHUB_OUTPUT
           echo "title=$(cat title)" >> $GITHUB_OUTPUT
-      - name: Check if beta channel # extract channel from comment: comments including "beta" will be released to the beta channel
-        id: beta-channel
-        if: contains(github.event.comment.body, '${{ env.beta-channel-name }}')
-        run: echo "beta channel specified ${{ github.event.comment.body }}"
-      - name: Extract channel
+      - name: Check if Beta release # extract channel from comment: comments including "beta" will be released to the beta channel
         id: channel
         run: |
-          if [[ ${{ steps.beta-channel.outcome }} == "success" ]]; then
+          if contains(github.event.comment.body, '${{ env.beta-channel-name }}'); then
             echo "channel=${{ env.beta-channel-name }}" >> $GITHUB_OUTPUT
             echo "prerelease=true" >> $GITHUB_OUTPUT
             echo "Beta Release!"
