@@ -49,10 +49,13 @@ jobs:
           echo "new_version=$(cat new_version)" >> $GITHUB_OUTPUT
           echo "old_version=$(cat new_version)" >> $GITHUB_OUTPUT
           echo "title=$(cat title)" >> $GITHUB_OUTPUT
-      - name: Extract channel # extract channel from comment: comments including "beta" will be released to the beta channel
+      - name: Check if beta channel # extract channel from comment: comments including "beta" will be released to the beta channel
+        id: beta-channel
+        if: contains(github.event.comment.body, '${{ env.beta-channel-name }}')
+      - name: Extract channel
         id: channel
         run: |
-          if [[ $(contains(github.event.comment.body, 'beta')) == "true" ]]; then
+          if [[ ${{ steps.beta-channel.outcome }} == "success" ]]; then
             echo "channel=${{ env.beta-channel-name }}" >> $GITHUB_OUTPUT
           else
             echo "channel=default" >> $GITHUB_OUTPUT
