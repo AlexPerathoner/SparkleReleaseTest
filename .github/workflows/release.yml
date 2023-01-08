@@ -143,7 +143,7 @@ jobs:
               --channel ${{ steps.channel.outputs.channel }} \
               -o docs/Support/appcast.xml \
               Release/
-          echo "appcast=${{ cat docs/Support/appcast.xml }}" >> $GITHUB_OUTPUT
+          echo "appcast=$(cat docs/Support/appcast.xml)" >> $GITHUB_OUTPUT
       - name: Create GitHub release # Upload .zip to GitHub release
         uses: softprops/action-gh-release@v1
         with:
@@ -183,7 +183,7 @@ jobs:
       - name: Save previously generated appcast
         if: ${{ steps.channel.outputs.prerelease == 'true' }}
         run: |
-          cat ${{ steps.appcast.outputs.appcast }} > docs/Support/appcast.xml
+          echo ${{ steps.appcast.outputs.appcast }} > docs/Support/appcast.xml
       - name: Saving appcast # commits only appcast to main
         uses: stefanzweifel/git-auto-commit-action@v4
         id: commit-appcast
