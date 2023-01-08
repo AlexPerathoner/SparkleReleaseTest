@@ -6,7 +6,7 @@ Complete guide to this project can be found [here](https://medium.com/@alex.pera
 
 ## What does the workflow do?
 
-The owner creates a PR to `master` and comments `/release`. If the PR is mergeable, this triggers a GitHub Action which will:
+The owner creates a PR to `main` (the branch which is used by GitHub Pages) and comments `/release`. If the PR is mergeable, this triggers a GitHub Action which will:
 1. Extrapolate from `Release_Notes.md` the:
     * latest version number
     * its release notes
@@ -33,7 +33,7 @@ The owner creates a PR to `master` and comments `/release`. If the PR is mergeab
 * Add a build certificate and a provision profile to the GitHub secrets, see [here](https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development) - needed in step 3
 * Add a `Release_Notes.md` file to the root of the project, (look at [Release_Notes.md](Release_Notes.md) for an example of how the release notes should be formatted))])
 * Add a `docs` folder to the root of the project, with a `Support` folder inside it. This is where the `appcast.xml` file will be generated and hosted.
-* Set `docs` in the `master` branch as the GitHub Pages source (repository settings > pages > source)
+* Set `docs` in the `main` branch as the GitHub Pages source (repository settings > pages > source)
 * In the Xcode project set the project and marketing versions to the same value (Project > General > Identity > Version and Build)
 * Add an item in the Release_Notes.md file for the current version, with the title `# <version> - <title>`, e.g. `# 1.0.0 - Initial Release`, this will be used by the workflow to get the previous version number
 * Create a Configuration folder and copy all the files from the `Configuration` folder in this repo to it
