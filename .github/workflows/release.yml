@@ -134,6 +134,7 @@ jobs:
           python3 ./Configuration/generate_html_for_sparkle_release.py
           mv Release/latest_changes.html Release/${{ env.projname }}.html
       - name: Update appcast # generate / update appcast.xml with edDSA key
+        id: appcast
         run: |
           echo "$PRIVATE_SPARKLE_KEY" | ./Configuration/generate_appcast \
               --ed-key-file - \
@@ -142,6 +143,7 @@ jobs:
               --channel ${{ steps.channel.outputs.channel }} \
               -o docs/Support/appcast.xml \
               Release/
+          echo "appcast=${{ cat docs/Support/appcast.xml }}" >> $GITHUB_OUTPUT
       - name: Create GitHub release # Upload .zip to GitHub release
         uses: softprops/action-gh-release@v1
         with:
@@ -167,19 +169,6 @@ jobs:
         if: ${{ steps.channel.outputs.prerelease == 'false' }}
         with:
           commit_message: "Update version to v${{ steps.latest_changes.outputs.new_version }}"
-      - name: Saving appcast # commits only appcast to main
-        uses: stefanzweifel/git-auto-commit-action@v4
-        id: commit-appcast
-        if: ${{ steps.channel.outputs.prerelease == 'true' }}
-        with:
-          file_pattern: docs/Support/appcast.xml
-          commit_message: "Update appcast with beta release for v${{ steps.latest_changes.outputs.new_version }}"
-      - name: Cherry pick appcast update commit
-        if: ${{ steps.channel.outputs.prerelease == 'true' }}
-        run: |
-          git checkout main
-          git cherry-pick ${{ steps.commit-appcast.commit_hash }}
-          git push
       - name: Create summary # create summary for PR
         run: |
           echo "Release v${{ steps.latest_changes.outputs.new_version }} created. Prerelease: ${{ steps.channel.outputs.prerelease }}" > summary
@@ -188,6 +177,20 @@ jobs:
         if: success() && ${{ steps.channel.outputs.prerelease == 'false' }}
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
+      - uses: actions/checkout@v3 # checkout again, directly on the main branch, if it's a prerelease
+        if: success() && ${{ steps.channel.outputs.prerelease == 'true' }}
+
+      - name: Save previously generated appcast
+        if: ${{ steps.channel.outputs.prerelease == 'true' }}
+        run: |
+          cat ${{ steps.appcast.outputs.appcast }} > docs/Support/appcast.xml
+      - name: Saving appcast # commits only appcast to main
+        uses: stefanzweifel/git-auto-commit-action@v4
+        id: commit-appcast
+        if: ${{ steps.channel.outputs.prerelease == 'true' }}
+        with:
+          file_pattern: docs/Support/appcast.xml
+          commit_message: "Update appcast with beta release for v${{ steps.latest_changes.outputs.new_version }}"
 
       - name: Merge PR # merge PR
         if: ${{ steps.channel.outputs.prerelease == 'false' }}
