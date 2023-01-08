@@ -3,6 +3,20 @@
     <channel>
         <title>testSparkleRelease</title>
         <item>
+            <title>1.4.13</title>
+            <pubDate>Sun, 08 Jan 2023 21:19:54 +0000</pubDate>
+            <link>https://github.com/AlexPerathoner/SparkleReleaseTest/releases</link>
+            <sparkle:channel>beta</sparkle:channel>
+            <sparkle:version>1.4.13</sparkle:version>
+            <sparkle:shortVersionString>1.4.13</sparkle:shortVersionString>
+            <description><![CDATA[<h1>test beta</h1>
+<ul>
+<li>PR including "beta" in comment will create a beta release</li>
+</ul>]]></description>
+            <sparkle:minimumSystemVersion>13.1</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/AlexPerathoner/SparkleReleaseTest/releases/download/v1.4.13/testSparkleRelease.zip" length="1238074" type="application/octet-stream"/>
+        </item>
+        <item>
             <title>1.4.12</title>
             <pubDate>Sat, 31 Dec 2022 13:27:09 +0000</pubDate>
             <link>https://github.com/AlexPerathoner/SparkleReleaseTest/releases</link>

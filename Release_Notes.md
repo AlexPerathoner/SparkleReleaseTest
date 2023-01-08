@@ -1,3 +1,6 @@
+# 1.4.13 - test beta
+* PR including "beta" in comment will create a beta release
+
 # 1.4.12 - test for merge conflict
 * some more tests
 * test for merge conflict
