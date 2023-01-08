@@ -183,6 +183,9 @@ jobs:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
       - uses: actions/checkout@v3 # checkout again, directly on the main branch, if it's a prerelease
         if: success() && ${{ steps.channel.outputs.prerelease == 'true' }}
+      - name: Remove old appcast # remove old appcast
+        if: ${{ steps.channel.outputs.prerelease == 'true' }}
+        run: rm -rf docs/Support/appcast.xml
       - name: Retrieve previously generated appcast
         if: ${{ steps.channel.outputs.prerelease == 'true' }}
         uses: actions/download-artifact@master
