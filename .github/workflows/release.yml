@@ -58,8 +58,10 @@ jobs:
         run: |
           if [[ ${{ steps.beta-channel.outcome }} == "success" ]]; then
             echo "channel=${{ env.beta-channel-name }}" >> $GITHUB_OUTPUT
+            echo "prerelease=true" >> $GITHUB_OUTPUT
           else
             echo "channel=default" >> $GITHUB_OUTPUT
+            echo "prerelease=false" >> $GITHUB_OUTPUT
           fi
       - name: Check if version already released # prevent releasing the same version twice
         run: |
@@ -147,9 +149,10 @@ jobs:
           tag_name: v${{ steps.latest_changes.outputs.new_version }}
           fail_on_unmatched_files: true
           body_path: latest_changes
-          files: |
-            Release/${{ env.projname }}.zip
+          files: Release/${{ env.projname }}.zip
+          prerelease: ${{ steps.channel.outputs.prerelease }}
       - name: Cleanup # remove all build files, keys, etc.
+        if: ${{ steps.channel.outputs.prerelease == 'false' }}
         run: |
           rm -rf Release
           rm -rf ${{ env.projname }}.xcarchive
@@ -161,18 +164,33 @@ jobs:
           rm -rf Configuration/sparkle_private_key
       - name: Saving changes # commits changes to branch (version bump, appcast.xml)
         uses: stefanzweifel/git-auto-commit-action@v4
+        if: ${{ steps.channel.outputs.prerelease == 'false' }}
         with:
           commit_message: "Update version to v${{ steps.latest_changes.outputs.new_version }}"
+      - name: Saving appcast # commits only appcast to main
+        uses: stefanzweifel/git-auto-commit-action@v4
+        id: commit-appcast
+        if: ${{ steps.channel.outputs.prerelease == 'true' }}
+        with:
+          file_pattern: docs/Support/appcast.xml
+          commit_message: "Update appcast with beta release for v${{ steps.latest_changes.outputs.new_version }}"
+      - name: Cherry pick appcast update commit
+        if: ${{ steps.channel.outputs.prerelease == 'true' }}
+        run: |
+          git checkout main
+          git cherry-pick ${{ steps.commit-appcast.commit_hash }}
+          git push
       - name: Create summary # create summary for PR
         run: |
-          echo "Release v${{ steps.latest_changes.outputs.new_version }} created" >> $GITHUB_STEP_SUMMARY
-      - uses: xt0rted/pull-request-comment-branch@v1 # checkout again, because the previous checkout is detached
-        id: comment-branch-2
-      - uses: actions/checkout@v3
-        if: success()
+          echo "Release v${{ steps.latest_changes.outputs.new_version }} created. Prerelease: ${{ steps.channel.outputs.prerelease }}" > summary
+
+      - uses: actions/checkout@v3 # checkout again, because the previous checkout is detached
+        if: success() && ${{ steps.channel.outputs.prerelease == 'false' }}
         with:
-          ref: ${{ steps.comment-branch-2.outputs.head_ref }}
+          ref: ${{ steps.comment-branch.outputs.head_ref }}
+
       - name: Merge PR # merge PR
+        if: ${{ steps.channel.outputs.prerelease == 'false' }}
         uses: "pascalgn/automerge-action@v0.15.5"
         env:
           MERGE_LABELS: "" # no labels necessary for the PR to be merged

@@ -736,6 +736,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="a" destination="V88-eQ-hRA" id="Adi-Vd-Eiu"/>
                         <outlet property="checkBetaUpdatesOutlet" destination="1kP-We-S56" id="mMg-sd-82Q"/>
                         <outlet property="updaterController" destination="V88-eQ-hRA" id="UrQ-el-QxA"/>
                     </connections>
