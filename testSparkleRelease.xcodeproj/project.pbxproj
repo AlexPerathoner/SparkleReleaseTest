@@ -35,6 +35,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FA1F071A296B806D005534BB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		FA1F071B296B806D005534BB /* appcast.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = appcast.xml; sourceTree = "<group>"; };
+		FA1F071D296B807B005534BB /* release.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = release.yml; sourceTree = "<group>"; };
+		FA1F071E296B8084005534BB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FA71414A295C7ADB0002419D /* testSparkleRelease.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = testSparkleRelease.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA71414D295C7ADB0002419D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FA71414F295C7ADB0002419D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -75,9 +79,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FA1F0718296B806D005534BB /* docs */ = {
+			isa = PBXGroup;
+			children = (
+				FA1F0719296B806D005534BB /* Support */,
+			);
+			path = docs;
+			sourceTree = "<group>";
+		};
+		FA1F0719296B806D005534BB /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				FA1F071A296B806D005534BB /* README.md */,
+				FA1F071B296B806D005534BB /* appcast.xml */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		FA1F071C296B807B005534BB /* workflows */ = {
+			isa = PBXGroup;
+			children = (
+				FA1F071D296B807B005534BB /* release.yml */,
+			);
+			name = workflows;
+			path = .github/workflows;
+			sourceTree = "<group>";
+		};
 		FA714141295C7ADB0002419D = {
 			isa = PBXGroup;
 			children = (
+				FA1F071E296B8084005534BB /* README.md */,
+				FA1F071C296B807B005534BB /* workflows */,
+				FA1F0718296B806D005534BB /* docs */,
 				FA71414C295C7ADB0002419D /* testSparkleRelease */,
 				FA71415E295C7ADE0002419D /* testSparkleReleaseTests */,
 				FA714168295C7ADE0002419D /* testSparkleReleaseUITests */,
@@ -431,7 +464,7 @@
 				CODE_SIGN_ENTITLEMENTS = testSparkleRelease/testSparkleRelease.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.4.13;
+				CURRENT_PROJECT_VERSION = 1.4.16;
 				DEVELOPMENT_TEAM = XX9N244QQT;
 				ENABLE_HARDENED_RUNTIME = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -443,7 +476,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.4.13;
+				MARKETING_VERSION = 1.4.16;
 				PRODUCT_BUNDLE_IDENTIFIER = alexpera.testSparkleRelease;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -459,7 +492,7 @@
 				CODE_SIGN_ENTITLEMENTS = testSparkleRelease/testSparkleRelease.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1.4.13;
+				CURRENT_PROJECT_VERSION = 1.4.16;
 				DEVELOPMENT_TEAM = XX9N244QQT;
 				ENABLE_HARDENED_RUNTIME = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -471,7 +504,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.4.13;
+				MARKETING_VERSION = 1.4.16;
 				PRODUCT_BUNDLE_IDENTIFIER = alexpera.testSparkleRelease;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -485,7 +518,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.4.13;
+				CURRENT_PROJECT_VERSION = 1.4.16;
 				DEVELOPMENT_TEAM = XX9N244QQT;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
@@ -504,7 +537,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.4.13;
+				CURRENT_PROJECT_VERSION = 1.4.16;
 				DEVELOPMENT_TEAM = XX9N244QQT;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
@@ -522,7 +555,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.4.13;
+				CURRENT_PROJECT_VERSION = 1.4.16;
 				DEVELOPMENT_TEAM = XX9N244QQT;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -539,7 +572,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.4.13;
+				CURRENT_PROJECT_VERSION = 1.4.16;
 				DEVELOPMENT_TEAM = XX9N244QQT;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;

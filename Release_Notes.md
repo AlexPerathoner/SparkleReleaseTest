@@ -1,3 +1,6 @@
+# 1.4.16 - test beta 4
+* Final test
+
 # 1.4.15 - test beta 3
 * PR including "beta" in comment will create a beta release
 * PR won't be merged
