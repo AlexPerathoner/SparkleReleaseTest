@@ -1,3 +1,6 @@
+# 1.4.18 - Some more checks
+* Some more checks
+
 # 1.4.17 - test beta 5
 * Final test cit
 
