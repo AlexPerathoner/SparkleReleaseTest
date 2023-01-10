@@ -297,7 +297,7 @@ jobs:
     name: Ending job
     if: success() || failure()
     runs-on: ubuntu-latest
-    needs: [pre-release, release] # todo check if valid syntax
+    needs: [pre-release, release]
     steps:
       - uses: geekyeggo/delete-artifact@v2
         with:
