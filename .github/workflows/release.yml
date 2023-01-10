@@ -68,7 +68,6 @@ jobs:
     name: Build and export app
     runs-on: macos-12
     needs: preparation
-    if: ${{ contains(github.event.comment.body, 'beta') }}
     steps:
       - uses: actions/download-artifact@master # download all previously generated artifacts
         with:
