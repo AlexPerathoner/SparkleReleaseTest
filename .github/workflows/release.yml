@@ -80,6 +80,7 @@ jobs:
           echo "new_version=$(cat artifacts/new_version/new_version)" >> $GITHUB_OUTPUT
           echo "old_version=$(cat artifacts/old_version/old_version)" >> $GITHUB_OUTPUT
           echo "title=$(cat artifacts/title/title)" >> $GITHUB_OUTPUT
+          echo $new_version $old_version $title
       - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
         id: comment-branch
       - uses: actions/checkout@v3
