@@ -23,7 +23,6 @@ jobs:
           comment-id: ${{ github.event.comment.id }}
           reactions: eyes
       - uses: actions/github-script@v6 # check if the PR is ready to be merged
-        id: get-run
         with:
           result-encoding: string
           script: |
@@ -62,7 +61,6 @@ jobs:
         with:
           path: |
             new_version
-            old_version
             title
 
   archive:
@@ -78,9 +76,8 @@ jobs:
       - name: Parse info generated in preparation job
         id: info
         run: |
-          echo "new_version=$(cat artifacts/new_version/new_version)" >> $GITHUB_OUTPUT
-          echo "old_version=$(cat artifacts/old_version/old_version)" >> $GITHUB_OUTPUT
-          echo "title=$(cat artifacts/title/title)" >> $GITHUB_OUTPUT
+          echo "new_version=$(cat artifacts/artifact/new_version)" >> $GITHUB_OUTPUT
+          echo "title=$(cat artifacts/artifact/title)" >> $GITHUB_OUTPUT
       - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
         id: comment-branch
       - uses: actions/checkout@v3
@@ -140,27 +137,27 @@ jobs:
 
   pre-release:
     name: Create pre-release
-    runs-on: macos-12
+    runs-on: ubuntu-latest
     environment: deploy-beta
     needs: archive
     if: ${{ contains(github.event.comment.body, 'beta') }}
     steps:
-      - uses: actions/download-artifact@master # download all previously generated artifacts
-        with:
-          path: artifacts
       - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
         id: comment-branch
       - uses: actions/checkout@v3
         if: success()
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
+      - uses: actions/download-artifact@master # download all previously generated artifacts
+        with:
+          path: artifacts
       - name: Parse info generated in preparation job
         id: info
         run: |
-          echo "new_version=$(cat artifacts/new_version/new_version)" >> $GITHUB_OUTPUT
-          echo "old_version=$(cat artifacts/old_version/old_version)" >> $GITHUB_OUTPUT
-          echo "title=$(cat artifacts/title/title)" >> $GITHUB_OUTPUT
+          echo "new_version=$(cat artifacts/artifact/new_version)" >> $GITHUB_OUTPUT
+          echo "title=$(cat artifacts/artifact/title)" >> $GITHUB_OUTPUT
           mkdir Release
+          ls -R artifacts
           mv artifacts/app/app.zip Release/
       - name: Prepare Sparkle update creation # Import Sparkle private key, remove unnecessary files in Release folder
         env:
@@ -217,26 +214,25 @@ jobs:
 
   release:
     name: "Create Release"
-    runs-on: macos-12
+    runs-on: ubuntu-latest
     environment: deploy-release
     needs: archive
     if: ${{ !contains(github.event.comment.body, 'beta') }}
     steps:
-      - uses: actions/download-artifact@master # download all previously generated artifacts
-        with:
-          path: artifacts
       - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
         id: comment-branch
       - uses: actions/checkout@v3
         if: success()
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
+      - uses: actions/download-artifact@master # download all previously generated artifacts
+        with:
+          path: artifacts
       - name: Parse info generated in preparation job
         id: info
         run: |
-          echo "new_version=$(cat artifacts/new_version/new_version)" >> $GITHUB_OUTPUT
-          echo "old_version=$(cat artifacts/old_version/old_version)" >> $GITHUB_OUTPUT
-          echo "title=$(cat artifacts/title/title)" >> $GITHUB_OUTPUT
+          echo "new_version=$(cat artifacts/artifact/new_version)" >> $GITHUB_OUTPUT
+          echo "title=$(cat artifacts/artifact/title)" >> $GITHUB_OUTPUT
           mkdir Release
           mv artifacts/app/app.zip Release/
       - name: Prepare Sparkle update creation # Import Sparkle private key, remove unnecessary files in Release folder
@@ -304,12 +300,13 @@ jobs:
             name: |
               *
       - name: Add success reactions # Adding reactions to comment depending on result
+        if: ${{ success() }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ github.event.comment.id }}
           reactions: rocket
       - name: Add negative reaction
-        if: failure()
+        if: ${{ failure() }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ github.event.comment.id }}
