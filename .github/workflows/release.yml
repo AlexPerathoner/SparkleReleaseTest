@@ -302,12 +302,13 @@ jobs:
             name: |
               *
       - name: Add success reactions # Adding reactions to comment depending on result
+        if: ${{ success() }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ github.event.comment.id }}
           reactions: rocket
       - name: Add negative reaction
-        if: failure()
+        if: ${{ failure() }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ github.event.comment.id }}
