@@ -76,7 +76,6 @@ jobs:
       - name: Parse info generated in preparation job
         id: info
         run: |
-          ls -R artifacts
           echo "new_version=$(cat artifacts/artifact/new_version)" >> $GITHUB_OUTPUT
           echo "title=$(cat artifacts/artifact/title)" >> $GITHUB_OUTPUT
       - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
@@ -156,7 +155,7 @@ jobs:
       - name: Parse info generated in preparation job
         id: info
         run: |
-          ls -R artifacts
+          ls -R ${{steps.download.outputs.download-path}}
           echo "new_version=$(cat ${{steps.download.outputs.download-path}}/new_version)" >> $GITHUB_OUTPUT
           echo "title=$(cat ${{steps.download.outputs.download-path}}/title)" >> $GITHUB_OUTPUT
           mkdir Release
