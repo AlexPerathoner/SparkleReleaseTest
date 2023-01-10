@@ -247,6 +247,13 @@ jobs:
           rm -rf Release/*.app
           rm -rf Release/*.log
           rm -rf Release/*.plist
+      - name: Sync branch
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: ${{ steps.comment-branch.outputs.base_ref }}
+          target_branch: ${{ steps.comment-branch.outputs.head_ref }}
+          github_token: ${{ github.token }}
       - name: Preparate Sparkle # generate Sparkle release notes (convert Markdown to HTML), remove beta item if present
         run: |
           pip3 install -r Configuration/requirements.txt
@@ -273,7 +280,7 @@ jobs:
       - name: Saving changes # commits changes to branch (version bump, appcast.xml)
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          file_pattern: | # todo check if works
+          file_pattern: |
             docs/Support/appcast.xml
             ${{ env.projname }}.xcodeproj/project.pbxproj
           commit_message: "Update version to v${{ steps.info.outputs.new_version }}"
@@ -285,13 +292,13 @@ jobs:
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
       - name: Merge PR # merge PR
-        uses: "pascalgn/automerge-action@v0.15.5"
-        env:
-          MERGE_LABELS: "" # no labels necessary for the PR to be merged
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          MERGE_COMMIT_MESSAGE: "Release version v${{ steps.info.outputs.new_version }}"
-          MERGE_FILTER_AUTHOR: "${{ github.repository_owner }}"
-          MERGE_ERROR_FAIL: true
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: ${{ steps.comment-branch.outputs.head_ref }}
+          target_branch: ${{ steps.comment-branch.outputs.base_ref }}
+          github_token: ${{ github.token }}
+          message: "Release version v${{ steps.info.outputs.new_version }}"
 
   ending:
     name: Ending job
