@@ -63,6 +63,18 @@ jobs:
             new_version
             title
             latest_changes
+      - name: Clean up generated files for sync
+        run: |
+          rm latest_changes
+          rm title
+          rm new_version
+      - name: Sync branch
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: ${{ steps.comment-branch.outputs.base_ref }}
+          target_branch: ${{ steps.comment-branch.outputs.head_ref }}
+          github_token: ${{ github.token }}
 
   archive:
     name: Build and export app
@@ -247,13 +259,6 @@ jobs:
           rm -rf Release/*.app
           rm -rf Release/*.log
           rm -rf Release/*.plist
-      - name: Sync branch
-        uses: devmasx/merge-branch@master
-        with:
-          type: now
-          from_branch: ${{ steps.comment-branch.outputs.base_ref }}
-          target_branch: ${{ steps.comment-branch.outputs.head_ref }}
-          github_token: ${{ github.token }}
       - name: Preparate Sparkle # generate Sparkle release notes (convert Markdown to HTML), remove beta item if present
         run: |
           pip3 install -r Configuration/requirements.txt
@@ -288,6 +293,14 @@ jobs:
         run: |
           echo "Release v${{ steps.info.outputs.new_version }} created." > $GITHUB_STEP_SUMMARY
 
+  ending:
+    name: Ending job
+    if: always()
+    runs-on: ubuntu-latest
+    needs: [pre-release, release]
+    steps:
+      - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
+        id: comment-branch
       - uses: actions/checkout@v3 # checkout again, because the previous checkout is detached
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
@@ -299,13 +312,6 @@ jobs:
           target_branch: ${{ steps.comment-branch.outputs.base_ref }}
           github_token: ${{ github.token }}
           message: "Release version v${{ steps.info.outputs.new_version }}"
-
-  ending:
-    name: Ending job
-    if: always()
-    runs-on: ubuntu-latest
-    needs: [pre-release, release]
-    steps:
       - uses: geekyeggo/delete-artifact@v2
         with:
           name: "*"
