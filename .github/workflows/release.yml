@@ -296,24 +296,15 @@ jobs:
     steps:
       - uses: geekyeggo/delete-artifact@v2
         with:
-          name: |
-            *
-			- name: check job statuses
-					run: |
-						if [["${{ needs.pre-release.outputs.job-status }}" == "Success" || "${{ needs.release.outputs.job.status }} == "Success"]]; then
-							echo "(Pre)release job passed!"
-              exit 0
-            else
-              exit 1
-					  fi
+          name: "*"
       - name: Add success reactions # Adding reactions to comment depending on result
-        if: ${{ success() }}
+        if: ${{ contains(join(needs.*.result, ','), 'success') }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ github.event.comment.id }}
           reactions: rocket
       - name: Add negative reaction
-        if: ${{ failure() }}
+        if: ${{ contains(join(needs.*.result, ','), 'failure') }}
         uses: peter-evans/create-or-update-comment@v2
         with:
           comment-id: ${{ github.event.comment.id }}
