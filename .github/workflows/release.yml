@@ -296,8 +296,8 @@ jobs:
     steps:
       - uses: geekyeggo/delete-artifact@v2
         with:
-            name: |
-              *
+          name: |
+            *
 			- name: check job statuses
 					run: |
 						if [["${{ needs.pre-release.outputs.job-status }}" == "Success" || "${{ needs.release.outputs.job.status }} == "Success"]]; then
