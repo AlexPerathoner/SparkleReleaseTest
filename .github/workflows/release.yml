@@ -296,7 +296,7 @@ jobs:
 
   ending:
     name: Ending job
-    if: success() || failure()
+    if: always()
     runs-on: ubuntu-latest
     needs: [pre-release, release]
     steps:
