@@ -187,7 +187,7 @@ jobs:
       - name: Create GitHub beta release # Upload .zip to GitHub release
         uses: softprops/action-gh-release@v1
         with:
-          name: ${{ steps.info.outputs.title }}
+          name: v${{ steps.info.outputs.new_version }}b - ${{ steps.info.outputs.title }}
           tag_name: v${{ steps.info.outputs.new_version }}-beta
           fail_on_unmatched_files: true
           body_path: latest_changes
@@ -271,7 +271,7 @@ jobs:
       - name: Create GitHub release # Upload .zip to GitHub release
         uses: softprops/action-gh-release@v1
         with:
-          name: ${{ steps.info.outputs.title }}
+          name: v${{ steps.info.outputs.new_version }} - ${{ steps.info.outputs.title }}
           tag_name: v${{ steps.info.outputs.new_version }}
           fail_on_unmatched_files: true
           body_path: latest_changes
