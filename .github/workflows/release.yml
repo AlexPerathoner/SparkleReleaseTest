@@ -12,11 +12,10 @@ env:
   beta-channel-name: "beta"
 
 jobs:
-  release:
-    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.user.login == github.repository_owner }}
-    name: "Create Release"
-    runs-on: macos-12
-    environment: deploy-release
+  preparation:
+    name: Preparation job
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/release') && github.event.comment.user.login == github.repository_owner }}
+    runs-on: ubuntu-latest
     steps:
       - name: Add reactions # adding reactions to the comment to show that the action is running
         uses: peter-evans/create-or-update-comment@v2
@@ -46,21 +45,6 @@ jobs:
         id: latest_changes
         run: |
           python3 ./Configuration/generate_latest_changes.py
-          echo "new_version=$(cat new_version)" >> $GITHUB_OUTPUT
-          echo "old_version=$(cat new_version)" >> $GITHUB_OUTPUT
-          echo "title=$(cat title)" >> $GITHUB_OUTPUT
-      - name: Check if Beta release # extract channel from comment: comments including "beta" will be released to the beta channel
-        id: channel
-        run: |
-          if [ ${{ contains(github.event.comment.body, 'beta')}} = 'true' ]; then
-            echo "channel=${{ env.beta-channel-name }}" >> $GITHUB_OUTPUT
-            echo "prerelease=true" >> $GITHUB_OUTPUT
-            echo "Beta Release!"
-          else
-            echo "channel=default" >> $GITHUB_OUTPUT
-            echo "prerelease=false" >> $GITHUB_OUTPUT
-            echo "Release!"
-          fi
       - name: Check if version already released # prevent releasing the same version twice
         run: |
           if [[ $(xcrun agvtool what-version -terse) == $(cat new_version) ]]; then
@@ -73,9 +57,39 @@ jobs:
             echo "Release notes are empty" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
+      - name: Save generated info
+        uses: actions/upload-artifact@master
+        with:
+          path: |
+            new_version
+            old_version
+            title
+
+  archive:
+    name: Build and export app
+    runs-on: macos-12
+    environment: deploy
+    needs: preparation
+    if: ${{ contains(github.event.comment.body, 'beta') }}
+    steps:
+      - uses: actions/download-artifact@master # download all previously generated artifacts
+        with:
+          path: artifacts
+      - name: Parse info generated in preparation job
+        id: info
+        run: |
+          echo "new_version=$(cat artifacts/new_version/new_version)" >> $GITHUB_OUTPUT
+          echo "old_version=$(cat artifacts/old_version/old_version)" >> $GITHUB_OUTPUT
+          echo "title=$(cat artifacts/title/title)" >> $GITHUB_OUTPUT
+      - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
+        id: comment-branch
+      - uses: actions/checkout@v3
+        if: success()
+        with:
+          ref: ${{ steps.comment-branch.outputs.head_ref }}
       - name: Override versions in project # set new version in project
         run: |
-          sed -i '' "s/_VERSION = $(xcrun agvtool what-version -terse)/_VERSION = ${{ steps.latest_changes.outputs.new_version }}/g" ${{ env.projname }}.xcodeproj/project.pbxproj;
+          sed -i '' "s/_VERSION = $(xcrun agvtool what-version -terse)/_VERSION = ${{ steps.info.outputs.new_version }}/g" ${{ env.projname }}.xcodeproj/project.pbxproj;
       - name: Install the Apple certificate and provisioning profile
           # install the Apple certificate and provisioning profile
           # following https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development
@@ -117,16 +131,42 @@ jobs:
       - name: Zip app # zip .app
         run: |
           cd Release
-          ditto -c -k --sequesterRsrc --keepParent ${{ env.projname }}.app ${{ env.projname }}.zip
-          cd ..
+          ditto -c -k --sequesterRsrc --keepParent ${{ env.projname }}.app ${{ env.projname }}.zip # todo check perhaps cd .. missing
+      - name: Upload achived app
+        uses: actions/upload-artifact@master
+        with:
+          name: app
+          path: Release/${{ env.projname }}.zip
+
+  pre-release:
+    name: Create pre-release
+    runs-on: macos-12
+    environment: deploy-beta
+    needs: archive
+    if: ${{ contains(github.event.comment.body, 'beta') }}
+    steps:
+      - uses: actions/download-artifact@master # download all previously generated artifacts
+        with:
+          path: artifacts
+      - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
+        id: comment-branch
+      - uses: actions/checkout@v3
+        if: success()
+        with:
+          ref: ${{ steps.comment-branch.outputs.head_ref }}
+      - name: Parse info generated in preparation job
+        id: info
+        run: |
+          echo "new_version=$(cat artifacts/new_version/new_version)" >> $GITHUB_OUTPUT
+          echo "old_version=$(cat artifacts/old_version/old_version)" >> $GITHUB_OUTPUT
+          echo "title=$(cat artifacts/title/title)" >> $GITHUB_OUTPUT
+          mkdir Release
+          mv artifacts/app/app.zip Release/
       - name: Prepare Sparkle update creation # Import Sparkle private key, remove unnecessary files in Release folder
         env:
           PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
         run: |
           echo -n "$PRIVATE_SPARKLE_KEY" > ./Configuration/sparkle_private_key
-          rm -rf Release/*.app
-          rm -rf Release/*.log
-          rm -rf Release/*.plist
       - name: Generate Sparkle notes # generate Sparkle release notes (convert Markdown to HTML)
         run: |
           pip3 install -r Configuration/requirements.txt
@@ -136,13 +176,12 @@ jobs:
         run: |
           ./Configuration/generate_appcast \
               --ed-key-file Configuration/sparkle_private_key \
-              --link https://github.com/AlexPerathoner/${{ github.event.repository.name }}/releases \
-              --download-url-prefix https://github.com/AlexPerathoner/${{ github.event.repository.name }}/releases/download/v${{ steps.latest_changes.outputs.new_version }}/ \
-              --channel ${{ steps.channel.outputs.channel }} \
+              --link https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases \
+              --download-url-prefix https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases/download/v${{ steps.info.outputs.new_version }}/ \
+              --channel ${{ env.beta-channel-name }}
               -o docs/Support/appcast.xml \
               Release/
       - name: Save generated appcast
-        if: ${{ steps.channel.outputs.prerelease == 'true' }}
         uses: actions/upload-artifact@master
         with:
           name: appcast
@@ -150,42 +189,21 @@ jobs:
       - name: Create GitHub release # Upload .zip to GitHub release
         uses: softprops/action-gh-release@v1
         with:
-          name: ${{ steps.latest_changes.outputs.title }}
-          tag_name: v${{ steps.latest_changes.outputs.new_version }}
+          name: ${{ steps.info.outputs.title }}
+          tag_name: v${{ steps.info.outputs.new_version }}
           fail_on_unmatched_files: true
           body_path: latest_changes
           files: Release/${{ env.projname }}.zip
-          prerelease: ${{ steps.channel.outputs.prerelease }}
-      - name: Cleanup # remove all build files, keys, etc.
-        run: |
-          rm -rf Release
-          rm -rf ${{ env.projname }}.xcarchive
-          rm -rf ${{ env.projname }}.zip
-          rm -rf latest_changes
-          rm -rf new_version
-          rm -rf old_version
-          rm -rf title
-          rm -rf Configuration/sparkle_private_key
-      - name: Saving changes # commits changes to branch (version bump, appcast.xml)
-        uses: stefanzweifel/git-auto-commit-action@v4
-        if: ${{ steps.channel.outputs.prerelease == 'false' }}
-        with:
-          commit_message: "Update version to v${{ steps.latest_changes.outputs.new_version }}"
+          prerelease: true
       - name: Create summary # create summary for PR
         run: |
-          echo "Release v${{ steps.latest_changes.outputs.new_version }} created. Prerelease: ${{ steps.channel.outputs.prerelease }}" > $GITHUB_STEP_SUMMARY
+          echo "Beta Release v${{ steps.info.outputs.new_version }} created" > $GITHUB_STEP_SUMMARY
 
-      - uses: actions/checkout@v3 # checkout again, because the previous checkout is detached
-        if: success() && ${{ steps.channel.outputs.prerelease == 'false' }}
-        with:
-          ref: ${{ steps.comment-branch.outputs.head_ref }}
-      - uses: actions/checkout@v3 # checkout again, directly on the main branch, if it's a prerelease
-        if: success() && ${{ steps.channel.outputs.prerelease == 'true' }}
+      - uses: actions/checkout@v3 # checkout again, directly on the main branch, as it's a prerelease
+        if: success()
       - name: Remove old appcast # remove old appcast
-        if: ${{ steps.channel.outputs.prerelease == 'true' }}
         run: rm -rf docs/Support/appcast.xml
       - name: Retrieve previously generated appcast
-        if: ${{ steps.channel.outputs.prerelease == 'true' }}
         uses: actions/download-artifact@master
         with:
           name: appcast
@@ -193,20 +211,98 @@ jobs:
       - name: Saving appcast # commits only appcast to main
         uses: stefanzweifel/git-auto-commit-action@v4
         id: commit-appcast
-        if: ${{ steps.channel.outputs.prerelease == 'true' }}
         with:
           file_pattern: docs/Support/appcast.xml
-          commit_message: "Update appcast with beta release for v${{ steps.latest_changes.outputs.new_version }}"
+          commit_message: "Update appcast with beta release for v${{ steps.info.outputs.new_version }}"
 
+  release:
+    name: "Create Release"
+    runs-on: macos-12
+    environment: deploy-release
+    needs: archive
+    if: ${{ !contains(github.event.comment.body, 'beta') }}
+    steps:
+      - uses: actions/download-artifact@master # download all previously generated artifacts
+        with:
+          path: artifacts
+      - uses: xt0rted/pull-request-comment-branch@v1 # check out branch of PR
+        id: comment-branch
+      - uses: actions/checkout@v3
+        if: success()
+        with:
+          ref: ${{ steps.comment-branch.outputs.head_ref }}
+      - name: Parse info generated in preparation job
+        id: info
+        run: |
+          echo "new_version=$(cat artifacts/new_version/new_version)" >> $GITHUB_OUTPUT
+          echo "old_version=$(cat artifacts/old_version/old_version)" >> $GITHUB_OUTPUT
+          echo "title=$(cat artifacts/title/title)" >> $GITHUB_OUTPUT
+          mkdir Release
+          mv artifacts/app/app.zip Release/
+      - name: Prepare Sparkle update creation # Import Sparkle private key, remove unnecessary files in Release folder
+        env:
+          PRIVATE_SPARKLE_KEY: ${{ secrets.PRIVATE_SPARKLE_KEY }}
+        run: |
+          echo -n "$PRIVATE_SPARKLE_KEY" > ./Configuration/sparkle_private_key
+          rm -rf Release/*.app
+          rm -rf Release/*.log
+          rm -rf Release/*.plist
+      - name: Preparate Sparkle # generate Sparkle release notes (convert Markdown to HTML), remove beta item if present
+        run: |
+          pip3 install -r Configuration/requirements.txt
+          python3 ./Configuration/generate_html_for_sparkle_release.py
+          mv Release/latest_changes.html Release/${{ env.projname }}.html
+          python3 ./Configuration/remove_last_item_appcast.py
+      - name: Update appcast # generate / update appcast.xml with edDSA key
+        run: |
+          ./Configuration/generate_appcast \
+              --ed-key-file Configuration/sparkle_private_key \
+              --link https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases \
+              --download-url-prefix https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases/download/v${{ steps.info.outputs.new_version }}/ \
+              -o docs/Support/appcast.xml \
+              Release/
+      - name: Create GitHub release # Upload .zip to GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ steps.info.outputs.title }}
+          tag_name: v${{ steps.info.outputs.new_version }}
+          fail_on_unmatched_files: true
+          body_path: latest_changes
+          files: Release/${{ env.projname }}.zip
+          prerelease: ${{ steps.channel.outputs.prerelease }}
+      - name: Saving changes # commits changes to branch (version bump, appcast.xml)
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          file_pattern: | # todo check if works
+            docs/Support/appcast.xml
+            ${{ env.projname }}.xcodeproj/project.pbxproj
+          commit_message: "Update version to v${{ steps.info.outputs.new_version }}"
+      - name: Create summary # create summary for PR
+        run: |
+          echo "Release v${{ steps.info.outputs.new_version }} created." > $GITHUB_STEP_SUMMARY
+
+      - uses: actions/checkout@v3 # checkout again, because the previous checkout is detached
+        with:
+          ref: ${{ steps.comment-branch.outputs.head_ref }}
       - name: Merge PR # merge PR
-        if: ${{ steps.channel.outputs.prerelease == 'false' }}
         uses: "pascalgn/automerge-action@v0.15.5"
         env:
           MERGE_LABELS: "" # no labels necessary for the PR to be merged
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          MERGE_COMMIT_MESSAGE: "Release version v${{ steps.latest_changes.outputs.new_version }}"
+          MERGE_COMMIT_MESSAGE: "Release version v${{ steps.info.outputs.new_version }}"
           MERGE_FILTER_AUTHOR: "${{ github.repository_owner }}"
           MERGE_ERROR_FAIL: true
+
+  ending:
+    name: Ending job
+    if: success() || failure()
+    runs-on: ubuntu-latest
+    needs: [pre-release, release]
+    steps:
+      - uses: geekyeggo/delete-artifact@v2
+        with:
+            name: |
+              *
       - name: Add success reactions # Adding reactions to comment depending on result
         uses: peter-evans/create-or-update-comment@v2
         with:
@@ -218,4 +314,3 @@ jobs:
         with:
           comment-id: ${{ github.event.comment.id }}
           reactions: confused
-
