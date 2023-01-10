@@ -184,11 +184,11 @@ jobs:
         with:
           name: appcast
           path: docs/Support/appcast.xml
-      - name: Create GitHub release # Upload .zip to GitHub release
+      - name: Create GitHub beta release # Upload .zip to GitHub release
         uses: softprops/action-gh-release@v1
         with:
           name: ${{ steps.info.outputs.title }}
-          tag_name: v${{ steps.info.outputs.new_version }}
+          tag_name: v${{ steps.info.outputs.new_version }}-beta
           fail_on_unmatched_files: true
           body_path: latest_changes
           files: Release/${{ env.projname }}.zip
