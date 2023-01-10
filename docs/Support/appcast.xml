@@ -14,7 +14,7 @@
 <li>Final test cit</li>
 </ul>]]></description>
             <sparkle:minimumSystemVersion>13.1</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/AlexPerathoner/SparkleReleaseTest/releases/download/v1.4.17/testSparkleRelease.zip" length="1238095" type="application/octet-stream" sparkle:edSignature="KEv6i1vLn4KBpLI/E1sYzeAlXL01thJIK0IIbAbwLXT2rzmfMOzsGVGgPJjFn8FLaSa43SWGwjaaTZdITakgAg=="/>
+            <enclosure url="https://github.com/AlexPerathoner/SparkleReleaseTest/releases/download/v1.4.17-beta/testSparkleRelease.zip" length="1238101" type="application/octet-stream" sparkle:edSignature="csNZXN+jkiPzRu4l72jxncSGr2baTbKO3Fo1gacy1gdkrZvMoq2RFZKjhSGoLUel2XVsmeh7l9DxYlzfL1FfCw=="/>
         </item>
         <item>
             <title>1.4.16</title>
