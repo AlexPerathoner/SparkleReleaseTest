@@ -23,7 +23,6 @@ jobs:
           comment-id: ${{ github.event.comment.id }}
           reactions: eyes
       - uses: actions/github-script@v6 # check if the PR is ready to be merged
-        id: get-run
         with:
           result-encoding: string
           script: |
