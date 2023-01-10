@@ -62,11 +62,11 @@ jobs:
           path: |
             new_version
             title
+            latest_changes
 
   archive:
     name: Build and export app
     runs-on: macos-12
-    environment: deploy
     needs: preparation
     if: ${{ contains(github.event.comment.body, 'beta') }}
     steps:
@@ -158,6 +158,7 @@ jobs:
           echo "title=$(cat artifacts/artifact/title)" >> $GITHUB_OUTPUT
           mv artifacts/artifact/new_version new_version
           mv artifacts/artifact/title title
+          mv artifacts/artifact/latest_changes latest_changes
           mkdir Release
           mv artifacts/app/${{ env.projname }}.zip Release/
       - name: Prepare Sparkle update creation # Import Sparkle private key, remove unnecessary files in Release folder
@@ -236,6 +237,7 @@ jobs:
           echo "title=$(cat artifacts/artifact/title)" >> $GITHUB_OUTPUT
           mv artifacts/artifact/new_version new_version
           mv artifacts/artifact/title title
+          mv artifacts/artifact/latest_changes latest_changes
           mkdir Release
           mv artifacts/app/${{ env.projname }}.zip Release/
       - name: Prepare Sparkle update creation # Import Sparkle private key, remove unnecessary files in Release folder
