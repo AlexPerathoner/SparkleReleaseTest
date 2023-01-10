@@ -148,7 +148,7 @@ jobs:
 
   pre-release:
     name: Create pre-release
-    runs-on: macos-latest
+    runs-on: macos-12
     environment: deploy-beta
     needs: archive
     if: ${{ contains(github.event.comment.body, 'beta') }}
